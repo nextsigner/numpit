@@ -10,7 +10,7 @@ Rectangle {
     property string jsonNum: ''
     property var aDes: ['dato1', 'dato2', 'dato3', 'dato4', 'dato5', 'dato6', 'dato7', 'dato8', 'dato9']
 
-    property alias currentDate: controlTimeDateNac.currentDate
+    property var currentDate
     property int currentNum: 0
 
     property color borderColor: apps.fontColor
@@ -32,7 +32,7 @@ Rectangle {
         let f = d + '/' + m + '/' + a
         let aGetNums=JS.getNums(f)
         currentNumKarma=aGetNums[0]
-        txtDataDia.text=d
+        //txtDataDia.text=d
     }
     MouseArea{
         anchors.fill: parent
@@ -41,7 +41,7 @@ Rectangle {
         id: flk
         anchors.fill: r
         contentWidth: r.width
-        contentHeight: col1.height
+        contentHeight: col1.height*1.5
         Column{
             id: col1
             spacing: app.fs*0.5
@@ -66,81 +66,126 @@ Rectangle {
                             id: colFN
                             spacing: app.fs*0.5
                             anchors.centerIn: parent
-                            Text{
-                                text: '<b>Fecha de Nacimiento</b>'
-                                color: apps.fontColor
-                                font.pixelSize: app.fs*0.5
-                                //anchors.verticalCenter: parent.verticalCenter
-                            }
-                            ControlsTimeDate{
-                                id: controlTimeDateNac
-                                //anchors.verticalCenter: parent.verticalCenter
-                                onCurrentDateChanged: {
-                                    if(controlTimeYear.currentDate){
-                                        let d=currentDate.getDate()
-                                        let m=currentDate.getMonth() + 1
-                                        let a = currentDate.getFullYear()
-                                        let sf=''+d+'/'+m+'/'+a
-                                        let aGetNums=JS.getNums(sf)
-                                        currentNumKarma=aGetNums[0]
-                                        let dateP = new Date(controlTimeYear.currentDate.getFullYear(), m - 1, d, 0, 1)
-                                        controlTimeYear.currentDate=dateP
-                                        let msfd=(''+d).split('')
-                                        let sfd=''+msfd[0]
-                                        if(msfd.length>1){
-                                            sfd +='+'+msfd[1]
+                            Row{
+                                spacing: app.fs*0.25
+                                Text{
+                                    id: labelFN
+                                    text: '<b>Fecha de Nacimiento:</b>'
+                                    color: apps.fontColor
+                                    font.pixelSize: app.fs*0.5
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+                                Rectangle{
+                                    id:xTiFecha
+                                    width: xForm.width-labelFN.width-app.fs
+                                    height: app.fs*1.2
+                                    color: apps.backgroundColor
+                                    border.width: 2
+                                    border.color: apps.fontColor
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    TextInput {
+                                        id: txtDataSearchFecha
+                                        text: apps.uFecha
+                                        font.pixelSize: app.fs*0.5
+                                        width: parent.width-app.fs*0.2
+                                        wrapMode: Text.WordWrap
+                                        color: apps.fontColor
+                                        focus: true
+                                        //inputMask: '00.00.0000'
+                                        anchors.centerIn: parent
+                                        Keys.onReturnPressed: {
+                                            if(text==='')return
+                                            panelLog.l(getNumNomText(text))
                                         }
-                                        let msfm=(''+m).split('')
-                                        let sfm=''+msfm[0]
-                                        if(msfm.length>1){
-                                            sfm +='+'+msfm[1]
-                                        }
-                                        //let msform=(''+a).split('')
-                                        let msfa=(''+a).split('')
-                                        let sfa=''+msfa[0]
-                                        if(msfa.length>1){
-                                            sfa +='+'+msfa[1]
-                                        }
-                                        if(msfa.length>2){
-                                            sfa +='+'+msfa[2]
-                                        }
-                                        if(msfa.length>3){
-                                            sfa +='+'+msfa[3]
-                                        }
-                                        let sform= sfd + '+' + sfm + '+' + sfa//msform[0] + '+' + msform[1] + '+'  + msform[2]+ '+'  + msform[3]
-                                        let sum=0
-                                        let mSum=sform.split('+')
-                                        for(var i=0;i<mSum.length;i++){
-                                            sum+=parseInt(mSum[i])
-                                        }
-                                        let mCheckSum=(''+sum).split('')
-                                        if(mCheckSum.length>1){
-                                            if(sum===11||sum===22||sum===33){
-                                                //r.esMaestro=true
+                                        onTextChanged: {
+                                            let mfecha=text.split('.')
+                                            if(!mfecha[0]||!mfecha[1]||!mfecha[2]||mfecha[2].length<4){
+                                                f0.text=''
+                                                currentNumKarma=-1
+                                                return
                                             }
-                                            let dobleDigSum=parseInt(mCheckSum[0])+parseInt(mCheckSum[1])
-                                            sform+='='+sum+'='+dobleDigSum
-                                            let mCheckSum2=(''+dobleDigSum).split('')
-                                            if(mCheckSum2.length>1){
-                                                let dobleDigSum2=parseInt(mCheckSum2[0])+parseInt(mCheckSum2[1])
-                                                sform+='='+dobleDigSum2
-                                                currentNumKarma=dobleDigSum2
+                                            let d=mfecha[0]
+                                            let m=mfecha[1]
+                                            let a = mfecha[2]
+                                            let sf=''+d+'/'+m+'/'+a
+                                            let aGetNums=JS.getNums(sf)
+                                            currentNumKarma=aGetNums[0]
+                                            let dateP = new Date(parseInt(txtDataSearchFechaAP.text), m - 1, d, 0, 1)
+                                            //controlTimeYear.currentDate=dateP
+                                            r.currentDate = dateP
+                                            let msfd=(''+d).split('')
+                                            let sfd=''+msfd[0]
+                                            if(msfd.length>1){
+                                                sfd +='+'+msfd[1]
+                                            }
+                                            let msfm=(''+m).split('')
+                                            let sfm=''+msfm[0]
+                                            if(msfm.length>1){
+                                                sfm +='+'+msfm[1]
+                                            }
+                                            //let msform=(''+a).split('')
+                                            let msfa=(''+a).split('')
+                                            let sfa=''+msfa[0]
+                                            if(msfa.length>1){
+                                                sfa +='+'+msfa[1]
+                                            }
+                                            if(msfa.length>2){
+                                                sfa +='+'+msfa[2]
+                                            }
+                                            if(msfa.length>3){
+                                                sfa +='+'+msfa[3]
+                                            }
+                                            let sform= sfd + '+' + sfm + '+' + sfa//msform[0] + '+' + msform[1] + '+'  + msform[2]+ '+'  + msform[3]
+                                            let sum=0
+                                            let mSum=sform.split('+')
+                                            for(var i=0;i<mSum.length;i++){
+                                                sum+=parseInt(mSum[i])
+                                            }
+                                            let mCheckSum=(''+sum).split('')
+                                            if(mCheckSum.length>1){
+                                                if(sum===11||sum===22||sum===33){
+                                                    //r.esMaestro=true
+                                                }
+                                                let dobleDigSum=parseInt(mCheckSum[0])+parseInt(mCheckSum[1])
+                                                sform+='='+sum+'='+dobleDigSum
+                                                let mCheckSum2=(''+dobleDigSum).split('')
+                                                if(mCheckSum2.length>1){
+                                                    let dobleDigSum2=parseInt(mCheckSum2[0])+parseInt(mCheckSum2[1])
+                                                    sform+='='+dobleDigSum2
+                                                    currentNumKarma=dobleDigSum2
+                                                }else{
+                                                    currentNumKarma=dobleDigSum
+                                                }
+
                                             }else{
-                                                currentNumKarma=dobleDigSum
+                                                currentNumKarma=sum
                                             }
-
-                                        }else{
-                                            currentNumKarma=sum
+                                            f0.text=sform
+                                            apps.uFecha=txtDataSearchFecha.text
+                                            calcularAP()
                                         }
-                                        f0.text=sform
-                                        //                                    if(panelLog.visible){
-                                        //                                        let edad=a - controlTimeDateNac.currentDate.getFullYear()
-
-                                        //                                        let sp='Período: Desde el cumpleaños del día '+d+'/'+m+'/'+a+' hasta el día '+d+'/'+m+'/'+parseInt(a + 1)
-                                        //                                        panelLog.l('Año: '+a+' - Edad: '+edad+' - Ciclo: '+parseInt(r.currentNum +1)+'\n'+sp+'\nCálculo: '+f1.text+'\n'+aDes[r.currentNum]+'\n')
-                                        //                                    }
+                                        onFocusChanged: {
+                                            if(focus)selectAll()
+                                        }
+                                        Rectangle{
+                                            width: parent.width+app.fs
+                                            height: parent.height+app.fs
+                                            color: 'transparent'
+                                            //border.width: 2
+                                            //border.color: 'white'
+                                            z: parent.z-1
+                                            anchors.centerIn: parent
+                                        }
                                     }
                                 }
+                            }
+
+                            Text{
+                                id: labelFNTS
+                                text: r.currentDate.toString()
+                                color: apps.fontColor
+                                font.pixelSize: app.fs*0.25
+                                anchors.horizontalCenter: parent.horizontalCenter
                             }
                             Text{
                                 id: f0
@@ -174,200 +219,7 @@ Rectangle {
                                         anchors.centerIn: parent
                                     }
                                 }
-                                Button{
-                                    text:  'Mostrar Personalidad'
-                                    onClicked: {
-                                        if(checkBoxFormula.checked){
-                                            panelLog.l('Fórmula: '+f0.text+'\n')
-                                            panelLog.l('Personalidad '+r.currentNumKarma+'\n')
-                                            panelLog.l(getItemJson('per'+r.currentNumKarma))
-                                        }else{
-                                            panelLog.l('¿Cómo es su personalidad?\n')
-                                            panelLog.l(getItemJson('per'+r.currentNumKarma))
-                                        }
-                                    }
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
                             }
-                        }
-                    }
-                    Rectangle{
-                        id: xFormNom
-                        width: xForm.width
-                        height: colNom.height+app.fs
-                        color: 'transparent'
-                        border.width: 2
-                        border.color: apps.fontColor
-                        radius: app.fs*0.2
-                        Column{
-                            id: colNom
-                            spacing: app.fs*0.5
-                            anchors.centerIn: parent
-                            Text{
-                                text: '<b>Calcular Nombre</b>'
-                                color: apps.fontColor
-                                font.pixelSize: app.fs*0.5
-                                anchors.horizontalCenter: parent.horizontalCenter
-                            }
-                            Rectangle{
-                                id:xTiNombre
-                                width: xForm.width-app.fs*0.5
-                                height: app.fs*1.2
-                                color: apps.backgroundColor
-                                border.width: 2
-                                border.color: apps.fontColor
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                Text{
-                                    text: '<b>Nombre:</b>'
-                                    color: apps.fontColor
-                                    font.pixelSize: app.fs*0.25
-                                    anchors.bottom: parent.top
-                                    anchors.bottomMargin: app.fs*0.25
-                                }
-                                TextInput {
-                                    id: txtDataSearchNom
-                                    text: ''
-                                    font.pixelSize: app.fs*0.5
-                                    width: parent.width-app.fs*0.2
-                                    wrapMode: Text.WordWrap
-                                    color: apps.fontColor
-                                    focus: false
-                                    anchors.centerIn: parent
-                                    Keys.onReturnPressed: {
-                                        if(text==='')return
-                                        panelLog.l(getNumNomText(text))
-                                    }
-                                    onTextChanged: {
-                                        //updateList()
-                                    }
-                                    onFocusChanged: {
-                                        if(focus)selectAll()
-                                    }
-                                    Rectangle{
-                                        width: parent.width+app.fs
-                                        height: parent.height+app.fs
-                                        color: 'transparent'
-                                        //border.width: 2
-                                        //border.color: 'white'
-                                        z: parent.z-1
-                                        anchors.centerIn: parent
-                                    }
-                                }
-                            }
-                            Row{
-                                spacing: app.fs*0.5
-                                Text{
-                                    text: '<b>Mostrar cálculo</b>'
-                                    color: apps.fontColor
-                                    font.pixelSize: app.fs*0.25
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                CheckBox{
-                                    id: checkBoxFormula
-                                    checked: false
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    //onCheckedChanged: panelLog.visible=checked
-                                }
-                            }
-                            Row{
-                                spacing: app.fs*0.5
-                                Text{
-                                    text: '<b>Día:</b>'
-                                    color: apps.fontColor
-                                    font.pixelSize: app.fs*0.25
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                CheckBox{
-                                    id: checkBoxDia
-                                    checked: false
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    //onCheckedChanged: panelLog.visible=checked
-                                }
-                                Rectangle{
-                                    id:xTiDia
-                                    width: app.fs
-                                    height: app.fs*1.2
-                                    color: apps.backgroundColor
-                                    border.width: 2
-                                    border.color: apps.fontColor
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    visible: checkBoxDia.checked
-
-                                    TextInput {
-                                        id: txtDataDia
-                                        text: ''
-                                        font.pixelSize: app.fs*0.5
-                                        width: parent.width-app.fs*0.2
-                                        wrapMode: Text.WordWrap
-                                        color: apps.fontColor
-                                        focus: false
-                                        anchors.centerIn: parent
-                                        validator: IntValidator {
-                                            bottom: 1
-                                            top: 31
-                                        }
-                                        onFocusChanged: {
-                                            if(focus)selectAll()
-                                        }
-                                    }
-                                    MouseArea{
-                                        anchors.fill: parent
-                                        onClicked: {
-                                            visible=false
-                                            showTiMaDia.restart()
-                                        }
-                                        onWheel: {
-                                            let n=parseInt(txtDataDia.text)
-                                            if(wheel.angleDelta.y>=0){
-                                                if(n<31){
-                                                    n++
-                                                }else{
-                                                    n=1
-                                                }
-                                            }else{
-                                                if(n>1){
-                                                    n--
-                                                }else{
-                                                    n=31
-                                                }
-                                            }
-                                            txtDataDia.text=n
-                                        }
-
-                                        Timer{
-                                            id: showTiMaDia
-                                            repeat: false
-                                            running: false
-                                            interval: 5000
-                                            onTriggered: parent.visible=true
-                                        }
-                                    }
-                                }
-                                Button{
-                                    text:  'Calcular'
-                                    onClicked: {
-                                        if(txtDataSearchNom.text==='')return
-                                        panelLog.l(getNumNomText(txtDataSearchNom.text))
-                                    }
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                            }
-                        }
-                    }
-                    Row{
-                        spacing: app.fs*0.5
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        Text{
-                            text: checkBoxLog.checked?'<b>Ocultar texto</b>':'<b>Mostrar texto.</b>'
-                            color: apps.fontColor
-                            font.pixelSize: app.fs*0.5
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                        CheckBox{
-                            id: checkBoxLog
-                            checked: panelLog.visible
-                            anchors.verticalCenter: parent.verticalCenter
-                            onCheckedChanged: panelLog.visible=checked
                         }
                     }
                 }
@@ -386,82 +238,68 @@ Rectangle {
                     spacing: app.fs*0.5
                     anchors.centerIn: parent
                     Row{
-                        spacing: app.fs
+                        spacing: app.fs*0.25
                         anchors.horizontalCenter: parent.horizontalCenter
                         Text{
+                            id: labelAP
                             text: '<b>N° Año Personal</b>'
                             color: apps.fontColor
                             font.pixelSize: app.fs*0.5
                             anchors.verticalCenter: parent.verticalCenter
                         }
-                        ControlsTimeFullYear{
-                            id: controlTimeYear
+                        Rectangle{
+                            id: xTiFechaAP
+                            width: xForm.width-labelAP.contentWidth-rowAp.width-app.fs
+                            height: app.fs*1.2
+                            color: apps.backgroundColor
+                            border.width: 2
+                            border.color: apps.fontColor
                             anchors.verticalCenter: parent.verticalCenter
-                            onCurrentDateChanged: {
-                                r.esMaestro=false
-                                let d = currentDate.getDate()
-                                let m = currentDate.getMonth() + 1
-                                let a = currentDate.getFullYear()
-                                let sf=''+d+'/'+m+'/'+a
-                                //let aGetNums=JS.getNums(sf)
-                                //currentNumAnioPersonal=aGetNums[0]
-                                let msfd=(''+d).split('')
-                                let sfd=''+msfd[0]
-                                if(msfd.length>1){
-                                    sfd +='+'+msfd[1]
+                            Text{
+                                text: '<b>Año:</b>'
+                                color: apps.fontColor
+                                font.pixelSize: app.fs*0.25
+                                anchors.bottom: parent.top
+                                anchors.bottomMargin: app.fs*0.25
+                            }
+                            TextInput {
+                                id: txtDataSearchFechaAP
+                                text: ''
+                                font.pixelSize: app.fs*0.5
+                                width: parent.width-app.fs*0.2
+                                wrapMode: Text.WordWrap
+                                color: apps.fontColor
+                                focus: true
+                                //inputMask: '00.00.0000'
+                                anchors.centerIn: parent
+                                Keys.onReturnPressed: {
+                                    if(text==='')return
+                                    //panelLog.l(getNumNomText(text))
                                 }
-                                let msfm=(''+m).split('')
-                                let sfm=''+msfm[0]
-                                if(msfm.length>1){
-                                    sfm +='+'+msfm[1]
+                                onTextChanged: {
+                                    calcularAP()
                                 }
-                                //let msform=(''+a).split('')
-                                let msfa=(''+a).split('')
-                                let sfa=''+msfa[0]
-                                if(msfa.length>1){
-                                    sfa +='+'+msfa[1]
+                                onFocusChanged: {
+                                    if(focus)selectAll()
                                 }
-                                if(msfa.length>2){
-                                    sfa +='+'+msfa[2]
-                                }
-                                if(msfa.length>3){
-                                    sfa +='+'+msfa[3]
-                                }
-                                let sform= sfd + '+' + sfm + '+' + sfa//msform[0] + '+' + msform[1] + '+'  + msform[2]+ '+'  + msform[3]
-                                let sum=0
-                                let mSum=sform.split('+')
-                                for(var i=0;i<mSum.length;i++){
-                                    sum+=parseInt(mSum[i])
-                                }
-                                let mCheckSum=(''+sum).split('')
-                                if(mCheckSum.length>1){
-                                    if(sum===11||sum===22||sum===33){
-                                        r.esMaestro=true
-                                    }
-                                    let dobleDigSum=parseInt(mCheckSum[0])+parseInt(mCheckSum[1])
-                                    sform+='='+sum+'='+dobleDigSum
-                                    let mCheckSum2=(''+dobleDigSum).split('')
-                                    if(mCheckSum2.length>1){
-                                        let dobleDigSum2=parseInt(mCheckSum2[0])+parseInt(mCheckSum2[1])
-                                        sform+='='+dobleDigSum2
-                                        currentNumAnioPersonal=dobleDigSum2
-                                    }else{
-                                        currentNumAnioPersonal=dobleDigSum
-                                    }
-
-                                }else{
-                                    currentNumAnioPersonal=sum
-                                }
-                                f1.text=sform
-                                if(panelLog.visible){
-                                    let edad=a - controlTimeDateNac.currentDate.getFullYear()
-
-                                    let sp='Período: Desde el cumpleaños del día '+d+'/'+m+'/'+a+' hasta el día '+d+'/'+m+'/'+parseInt(a + 1)
-                                    panelLog.l('Año: '+a+' - Edad: '+edad+' - Ciclo: '+parseInt(r.currentNum +1)+'\n'+sp+'\nCálculo: '+f1.text+'\n'+aDes[r.currentNum]+'\n')
+                                Rectangle{
+                                    width: parent.width+app.fs
+                                    height: parent.height+app.fs
+                                    color: 'transparent'
+                                    //border.width: 2
+                                    //border.color: 'white'
+                                    z: parent.z-1
+                                    anchors.centerIn: parent
                                 }
                             }
                         }
+
+
+
+
+
                         Row{
+                            id: rowAp
                             spacing: app.fs*0.5
                             anchors.verticalCenter: parent.verticalCenter
                             Text{
@@ -499,141 +337,68 @@ Rectangle {
                 }
             }
             Rectangle{
-                id: xNums
-                width: r.width
-                height: width
-                border.width: r.borderWidth
-                border.color: r.borderColor
-                color: apps.backgroundColor
-                radius: width*0.5
-                anchors.horizontalCenter: parent.horizontalCenter
-                Behavior on rotation{NumberAnimation{duration: 500}}
-                MouseArea{
-                    anchors.fill: parent
-                    enabled: false
-                    onWheel: {
-                        if(wheel.angleDelta.y>=0){
-                            r.dir=1
-                            if(r.currentNum<8){
-                                r.currentNum++
-                            }else{
-                                r.currentNum=0
-                            }
-                        }else{
-                            r.dir=0
-                            if(r.currentNum>0){
-                                r.currentNum--
-                            }else{
-                                r.currentNum=8
-                            }
-                        }
-                    }
-                }
-                Repeater{
-                    id: rep
-                    model: r.aDes
-                    Item{
-                        width: 1
-                        height: parent.width-parent.border.width*2
-                        anchors.centerIn: parent
-                        rotation: 360/9*index//+90
-                        Rectangle{
-                            width: r.borderWidth
-                            height: parent.parent.height*0.5-xNum.width-xData.width*0.5-canvasSen.width*0.5
-                            color: apps.fontColor
-                            opacity: r.currentNum!==index?0.5:1.0
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.top: parent.top
-                            anchors.topMargin:  xNum.width
-                            visible: r.currentNum===index
-                            Canvas {
-                                id:canvasSen
-                                width: app.fs
-                                height: width
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.bottom: parent.bottom
-                                //anchors.verticalCenter: parent.verticalCenter
-                                //anchors.left: parent.right
-                                antialiasing: true
-                                rotation: -90
-                                onPaint:{
-                                    var ctx = canvasSen.getContext('2d');
-                                    ctx.beginPath();
-                                    ctx.moveTo(0, canvasSen.width*0.5);
-                                    ctx.lineTo(canvasSen.width, 0);
-                                    ctx.lineTo(canvasSen.width, canvasSen.width);
-                                    ctx.lineTo(0, canvasSen.width*0.5);
-                                    ctx.strokeStyle = r.currentNum===index?apps.fontColor:apps.backgroundColor
-                                    ctx.lineWidth = 3//canvasSen.parent.height;
-                                    ctx.fillStyle = r.currentNum===index?apps.backgroundColor:apps.fontColor
-                                    ctx.fill();
-                                    ctx.stroke();
-                                }
-                            }
-                        }
-                        Rectangle{
-                            id: xNum
-                            width: app.fs*1.5
-                            height: width
-                            radius: width*0.5
-                            border.width: app.fs*0.2
-                            border.color: r.currentNum===index?apps.fontColor:apps.backgroundColor
-                            //rotation: 360-parent.rotation
-                            color: r.currentNum===index?apps.fontColor:apps.backgroundColor
-                            rotation: 360-parent.rotation-parent.parent.rotation//-360/9*r.currentNum-90
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            opacity: r.currentNum!==index?0.5:1.0
-                            Timer{
-                                running: r.visible
-                                repeat: true
-                                interval: 500
-                                onTriggered: {
-                                    if(index===1){
-                                        txtNum.text=r.esMaestro&&index===r.currentNumAnioPersonal-1?'<b>11</b>':'<b>2</b>'
-                                    }else if(index===3){
-                                        txtNum.text=r.esMaestro&&index===r.currentNumAnioPersonal-1?'<b>22</b>':'<b>4</b>'
-                                    }else if(index===5){
-                                        txtNum.text=r.esMaestro&&index===r.currentNumAnioPersonal-1?'<b>33</b>':'<b>6</b>'
-                                    }else{
-                                        txtNum.text='<b>'+parseInt(index + 1)+'</b>'
-                                    }
-                                }
-                            }
-                            Text{
-                                id: txtNum
-                                text: '<b>'+index+'</b>'
-                                font.pixelSize: parent.width*0.75
-                                color: r.currentNum===index?apps.backgroundColor:apps.fontColor
-                                anchors.centerIn: parent
-                                Component.onCompleted: {
-                                    if(index===1){
-                                        text='<b>11</b>'
-                                    }else{
-                                        text='<b>'+parseInt(index + 1)+'</b>'
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                Rectangle{
-                    id: xData
-                    width: parent.width*0.4
-                    height: width
-                    border.width: r.borderWidth
-                    border.color: r.borderColor
-                    color: 'transparent'//apps.backgroundColor
-                    radius: width*0.5
+                id: xFormNom
+                width: xForm.width
+                height: colNom.height+app.fs
+                color: 'transparent'
+                border.width: 2
+                border.color: apps.fontColor
+                radius: app.fs*0.2
+                Column{
+                    id: colNom
+                    spacing: app.fs*0.5
                     anchors.centerIn: parent
                     Text{
-                        id: data
-                        text : ''+r.aDes[r.currentNum]
-                        width: parent.width-app.fs
-                        font.pixelSize: parent.width*0.08
-                        wrapMode: Text.WordWrap
-                        horizontalAlignment: Text.AlignHCenter
-                        anchors.centerIn: parent
+                        text: '<b>Calcular Nombre</b>'
                         color: apps.fontColor
+                        font.pixelSize: app.fs*0.5
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                    Rectangle{
+                        id:xTiNombre
+                        width: xForm.width-app.fs*0.5
+                        height: app.fs*1.2
+                        color: apps.backgroundColor
+                        border.width: 2
+                        border.color: apps.fontColor
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Text{
+                            text: '<b>Nombre:</b>'
+                            color: apps.fontColor
+                            font.pixelSize: app.fs*0.25
+                            anchors.bottom: parent.top
+                            anchors.bottomMargin: app.fs*0.25
+                        }
+                        TextInput {
+                            id: txtDataSearchNom
+                            text: apps.uNom
+                            font.pixelSize: app.fs*0.5
+                            width: parent.width-app.fs*0.2
+                            wrapMode: Text.WordWrap
+                            color: apps.fontColor
+                            focus: false
+                            anchors.centerIn: parent
+                            Keys.onReturnPressed: {
+                                if(text==='')return
+                                panelLog.l(getNumNomText(text))
+                                apps.uNom=text
+                            }
+                            onTextChanged: {
+                                apps.uNom=text
+                            }
+                            onFocusChanged: {
+                                if(focus)selectAll()
+                            }
+                            Rectangle{
+                                width: parent.width+app.fs
+                                height: parent.height+app.fs
+                                color: 'transparent'
+                                //border.width: 2
+                                //border.color: 'white'
+                                z: parent.z-1
+                                anchors.centerIn: parent
+                            }
+                        }
                     }
                 }
             }
@@ -646,19 +411,132 @@ Rectangle {
                 border.color: apps.fontColor
                 radius: app.fs*0.2
                 anchors.horizontalCenter: parent.horizontalCenter
+                Text{
+                    text: '<b>Calcular</b>'
+                    color: apps.fontColor
+                    font.pixelSize: app.fs*0.5
+                    anchors.left: parent.left
+                    anchors.leftMargin: app.fs*0.25
+                    anchors.top: parent.top
+                    anchors.topMargin: app.fs*0.25
+                }
                 Column{
                     id: colBtns
-                    spacing: app.fs
+                    spacing: app.fs*0.25
                     anchors.centerIn: parent
                     Row{
-                        spacing: app.fs*0.5
+                        spacing: app.fs*0.25
                         anchors.horizontalCenter: parent.horizontalCenter
-                        visible: checkBoxLog.checked
+                        Text{
+                            text: '<b>Mostrar cálculo</b>'
+                            color: apps.fontColor
+                            font.pixelSize: app.fs*0.25
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        CheckBox{
+                            id: checkBoxFormula
+                            checked: apps.numShowFormula
+                            anchors.verticalCenter: parent.verticalCenter
+                            onCheckedChanged: apps.numShowFormula=checked
+                        }
+                    }
+                    Row{
+                        spacing: app.fs*0.25
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Button{
+                            text:  'Natalicio'
+                            anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                if(txtDataSearchNom.text==='')return
+                                panelLog.clear()
+                                panelLog.l(getDataJsonNumDia())
+                                panelLog.visible=true
+                                panelLog.flk.contentY=0
+                            }
+                        }
+                        Button{
+                            text:  'Nombre'
+                            anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                if(txtDataSearchNom.text==='')return
+                                panelLog.clear()
+                                panelLog.l(getNumNomText(txtDataSearchNom.text))
+                                panelLog.visible=true
+                                panelLog.flk.contentY=0
+                            }
+                        }
+                        Button{
+                            text:  'Personalidad'
+                            anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                panelLog.clear()
+                                if(checkBoxFormula.checked){
+                                    panelLog.l('Personalidad '+r.currentNumKarma+'\n')
+                                    panelLog.l('Fórmula: '+f0.text+'\n')
+                                    panelLog.l(getItemJson('per'+r.currentNumKarma))
+                                }else{
+                                    panelLog.l('¿Cómo es su personalidad?\n')
+                                    panelLog.l(getItemJson('per'+r.currentNumKarma))
+                                }
+                                panelLog.visible=true
+                                panelLog.flk.contentY=0
+                            }
+                        }
+                    }
+                    Row{
+                        spacing: app.fs*0.25
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Button{
+                            text:  'Años Personales'
+                            anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                panelLog.clear()
+                                panelLog.l(mkDataList())
+                                panelLog.visible=true
+                                panelLog.flk.contentY=0
+                            }
+                        }
+                        Button{
+                            text:  'Calcular todo'
+                            anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                panelLog.clear()
+
+                                //Personalidad
+                                if(checkBoxFormula.checked){
+                                    panelLog.l('Personalidad '+r.currentNumKarma+'\n')
+                                    panelLog.l('Fórmula: '+f0.text+'\n')
+                                    panelLog.l(getItemJson('per'+r.currentNumKarma))
+                                }else{
+                                    panelLog.l('¿Cómo es su personalidad?\n')
+                                    panelLog.l(getItemJson('per'+r.currentNumKarma))
+                                }
+                                panelLog.l('\n')
+
+                                //Nombre
+                                panelLog.l(getNumNomText(txtDataSearchNom.text))
+                                panelLog.l('\n')
+
+                                //Natalicio
+                                panelLog.l(getDataJsonNumDia())
+                                panelLog.l('\n')
+
+                                //Lista de 100 años personales
+                                panelLog.l(mkDataList())
+                                panelLog.l('\n')
+
+                                panelLog.visible=true
+                                panelLog.flk.contentY=0
+                            }
+                        }
+                    }
+                    Row{
+                        spacing: app.fs*0.25
+                        anchors.horizontalCenter: parent.horizontalCenter
                         Button{
                             text:  'Limpiar'
                             onClicked: panelLog.clear()
                             anchors.verticalCenter: parent.verticalCenter
-                            visible: checkBoxLog.checked
                         }
                         Button{
                             text:  'Copiar'
@@ -666,27 +544,16 @@ Rectangle {
                                 clipboard.setText(panelLog.text)
                             }
                             anchors.verticalCenter: parent.verticalCenter
-                            visible: checkBoxLog.checked
-                        }
-                        Button{
-                            text:  'Crear Lista'
-                            onClicked: mkDataList()
-                            anchors.verticalCenter: parent.verticalCenter
-                            visible: checkBoxLog.checked
+
                         }
                     }
                 }
             }
-            PanelLog{
-                id: panelLog
-                width: app.width
-                height: app.height
-                visible: true
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
         }
     }
     Component.onCompleted: {
+        let date = new Date(Date.now())
+        txtDataSearchFechaAP.text=date.getFullYear()
         let a =[]
         let d = 'INICIOS, VIDA NUEVA, RENOVACIONES'
         a.push(d)
@@ -707,8 +574,6 @@ Rectangle {
         d = 'AUTOSUFICIENCIA, CONSOLIDACIÓN, CIERRE DE CICLO'
         a.push(d)
         r.aDes=a
-        rep.model=a
-        //xNums.rotation=90
     }
     function getNumNomText(text){
         let ret=''
@@ -813,13 +678,19 @@ Rectangle {
             ret+='¿Cómo es la forma de ser de '+txtDataSearchNom.text+' por dentro?\n\n'+dataInt+'\n\n'
             ret+='¿Cómo es la forma de ser de '+txtDataSearchNom.text+' hacia afuera?\n\n'+dataExt+'\n\n'
         }
+        return ret
+    }
+    function getDataJsonNumDia(){
+        let ret=''
+        let mfecha=txtDataSearchFecha.text.split('.')
+        if(!mfecha[0]||!mfecha[1]||!mfecha[2]||mfecha[2].length<4){
+            return ret
+        }
         let stringDia=''
-        if(checkBoxDia.checked){
-            let dia=parseInt(txtDataDia.text)
-            if(dia>0&&dia<=31){
-                stringDia=getDataNumDia(dia)
-                ret+='Natalicio en día '+dia+': '+stringDia
-            }
+        let dia=parseInt(mfecha[0])
+        if(dia>0&&dia<=31){
+            stringDia=getDataNumDia(dia)
+            ret+='Natalicio en día '+dia+': '+stringDia
         }
         return ret
     }
@@ -841,7 +712,7 @@ Rectangle {
         let ret='?'
         let jsonString
         if(r.jsonNum===''){
-            r.jsonNum=unik.getFile('./resources/num.json')
+            r.jsonNum=unik.getFile('num.json')
         }
         jsonString=r.jsonNum.replace(/\n/g, ' ')
         let json=JSON.parse(jsonString)
@@ -896,9 +767,14 @@ Rectangle {
         return r
     }
     function mkDataList(){
-        var ai=r.currentDate.getFullYear()
-        var d = currentDate.getDate()
-        var m = currentDate.getMonth() + 1
+        let ret=''
+        let mfecha=txtDataSearchFecha.text.split('.')
+        if(!mfecha[0]||!mfecha[1]||!mfecha[2]||mfecha[2].length<4){
+            return ret
+        }
+        var ai=parseInt(mfecha[2])
+        var d =parseInt(mfecha[0])
+        var m =parseInt(mfecha[1])
         var sformTodo='Ciclo de Vida Numerológico\n\n'
         //return
         for(var i=ai;i<ai+101;i++){
@@ -961,9 +837,7 @@ Rectangle {
             //sformTodo+='Año: '+i+' - Edad: '+edad+' - Ciclo: '+parseInt(currentNumAP)+'\n'+sp+'\nCálculo: '+sform+'\n'+aDes[currentNumAP - 1]+'\n\n'
             sformTodo+='Año: '+i+' - Edad: '+edad+'\nAño personal de ciclo: '+parseInt(currentNumAP)+'\n'+sp+'\nCálculo: '+sform+'\n'+aDes[currentNumAP - 1]+'\n\n'
         }
-        if(panelLog.visible){
-            panelLog.l(sformTodo)
-        }
+        return sformTodo
     }
     function printData(nom, date){
         txtDataSearchNom.text=nom
@@ -977,5 +851,71 @@ Rectangle {
         panelLog.l(getNumNomText(nom))
         panelLog.l('¿Cómo es su personalidad?\n')
         panelLog.l(getItemJson('per'+vCurrentNumKarma))
+    }
+    function calcularAP(){
+        r.esMaestro=false
+        let mfecha=txtDataSearchFecha.text.split('.')
+        if(!mfecha[0]||!mfecha[1]||!mfecha[2]||mfecha[2].length<4){
+            f1.text=''
+            currentNumAnioPersonal=-1
+            return
+        }
+        let d=mfecha[0]
+        let m=mfecha[1]
+        let a = txtDataSearchFechaAP.text
+        let sf=''+d+'/'+m+'/'+a
+        let msfd=(''+d).split('')
+        let sfd=''+msfd[0]
+        if(msfd.length>1){
+            sfd +='+'+msfd[1]
+        }
+        let msfm=(''+m).split('')
+        let sfm=''+msfm[0]
+        if(msfm.length>1){
+            sfm +='+'+msfm[1]
+        }
+        //let msform=(''+a).split('')
+        let msfa=(''+a).split('')
+        let sfa=''+msfa[0]
+        if(msfa.length>1){
+            sfa +='+'+msfa[1]
+        }
+        if(msfa.length>2){
+            sfa +='+'+msfa[2]
+        }
+        if(msfa.length>3){
+            sfa +='+'+msfa[3]
+        }
+        let sform= sfd + '+' + sfm + '+' + sfa//msform[0] + '+' + msform[1] + '+'  + msform[2]+ '+'  + msform[3]
+        let sum=0
+        let mSum=sform.split('+')
+        for(var i=0;i<mSum.length;i++){
+            sum+=parseInt(mSum[i])
+        }
+        let mCheckSum=(''+sum).split('')
+        if(mCheckSum.length>1){
+            if(sum===11||sum===22||sum===33){
+                r.esMaestro=true
+            }
+            let dobleDigSum=parseInt(mCheckSum[0])+parseInt(mCheckSum[1])
+            sform+='='+sum+'='+dobleDigSum
+            let mCheckSum2=(''+dobleDigSum).split('')
+            if(mCheckSum2.length>1){
+                let dobleDigSum2=parseInt(mCheckSum2[0])+parseInt(mCheckSum2[1])
+                sform+='='+dobleDigSum2
+                currentNumAnioPersonal=dobleDigSum2
+            }else{
+                currentNumAnioPersonal=dobleDigSum
+            }
+
+        }else{
+            currentNumAnioPersonal=sum
+        }
+        f1.text=sform
+        let edad=a - parseInt(txtDataSearchFechaAP.text)
+
+        let sp='Período: Desde el cumpleaños del día '+d+'/'+m+'/'+a+' hasta el día '+d+'/'+m+'/'+parseInt(a + 1)
+        panelLog.l('Año: '+a+' - Edad: '+edad+' - Ciclo: '+parseInt(r.currentNum +1)+'\n'+sp+'\nCálculo: '+f1.text+'\n'+aDes[r.currentNum]+'\n')
+
     }
 }

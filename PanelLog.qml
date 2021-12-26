@@ -4,17 +4,18 @@ import QtQuick.Controls 2.0
 Rectangle{
     id: r
     width: app.fs*20
-    height: xApp.height-(xApp.height-xBottomBar.y)
+    height: xApp.height
     color: apps.backgroundColor
-    visible: apps.showLog
+    visible: false
     border.width: 2
     border.color: apps.fontColor
     clip: true
+    property alias flk: flLog
     property alias text: taLog.text
     property bool ww: true
     MouseArea{
         anchors.fill: parent
-        onClicked: apps.showLog=false
+        onClicked: r.visible=false
     }
     Flickable{
         id: flLog
@@ -45,7 +46,7 @@ Rectangle{
         MouseArea{
             anchors.fill: parent
             onClicked: {
-                apps.showLog=false
+                r.visible=false
                 r.visible=apps.showLog
             }
         }
