@@ -606,51 +606,24 @@ Rectangle {
                             anchors.verticalCenter: parent.verticalCenter
                             onClicked: {
                                 panelLog.clear()
+                                panelLog.l(getTodo())
+                                panelLog.visible=true
+                                panelLog.flk.contentY=0
+                            }
+                        }
+                    }
+                    Row{
+                        spacing: app.fs*0.25
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Button{
+                            text:  'Guardar todo en archivo'
+                            anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                let fn=unik.getPath(3)+'/'+(txtDataSearchNom.text).replace(/ /g,'_')+'.txt'
 
-                                //Personalidad
-                                if(checkBoxFormula.checked){
-                                    panelLog.l('Personalidad '+r.currentNumPersonalidad+'\n')
-                                    panelLog.l('Fórmula: '+f0.text+'\n')
-                                    panelLog.l(getItemJson('per'+r.currentNumPersonalidad))
-                                }else{
-                                    panelLog.l('¿Cómo es su personalidad?\n')
-                                    panelLog.l(getItemJson('per'+r.currentNumPersonalidad))
-                                }
-
-                                //Número de nacimiento o karma
-                                if(checkBoxFormula.checked){
-                                    panelLog.l('N° de Nacimiento/Karma '+r.currentNumNacimiento+'\n')
-                                    panelLog.l('Fórmula: '+f0.text+'\n')
-                                    panelLog.l(getItemJson('per'+r.currentNumNacimiento))
-                                }else{
-                                    panelLog.l('¿Cómo es su vibración de nacimiento o karma '+r.currentNumNacimiento+'?\n')
-                                    panelLog.l(getItemJson('per'+r.currentNumNacimiento))
-                                }
-                                panelLog.l('\n')
-
-                                //Nombre
-                                panelLog.l(getNumNomText(txtDataSearchNom.text))
-                                panelLog.l('\n')
-
-                                //Natalicio
-                                panelLog.l(getDataJsonNumDia())
-                                panelLog.l('\n')
-
-                                //Firma
-                                panelLog.l('¿Cómo es la energía de su firma?\n')
-                                panelLog.l(getItemJson('firma'+r.currentNumFirma))
-                                panelLog.l('\n')
-
-                                //Destino
-                                panelLog.l('¿Cómo podría ser su destino?\n')
-                                panelLog.l(getItemJson('dest'+r.currentNumDestino))
-                                panelLog.l('\n')
-
-
-                                //Lista de 100 años personales
-                                panelLog.l(mkDataList())
-                                panelLog.l('\n')
-
+                                unik.setFile(fn, getTodo())
+                                panelLog.clear()
+                                panelLog.l('El archivo se ha guardado en '+fn)
                                 panelLog.visible=true
                                 panelLog.flk.contentY=0
                             }
@@ -681,7 +654,7 @@ Rectangle {
         id: tCalc
         running: !panelLog.visible
         repeat: true
-        interval: 1000
+        interval: 250
         onTriggered: {
             calc()
         }
@@ -1186,5 +1159,52 @@ Rectangle {
         let dataNombre=getNumNomText(txtDataSearchNom.text)
 
 
+    }
+    function getTodo(){
+        let ret=''
+        if(checkBoxFormula.checked){
+            ret+='Personalidad '+r.currentNumPersonalidad+'\n'
+            ret+='Fórmula: '+f0.text+'\n'
+            ret+=getItemJson('per'+r.currentNumPersonalidad)
+        }else{
+            ret+='¿Cómo es su personalidad?\n'
+            ret+=getItemJson('per'+r.currentNumPersonalidad)
+        }
+        ret+='\n'
+
+        //Número de nacimiento o karma
+        if(checkBoxFormula.checked){
+            ret+='N° de Nacimiento/Karma '+r.currentNumNacimiento+'\n'
+            ret+='Fórmula: '+f0.text+'\n'
+            ret+=getItemJson('per'+r.currentNumNacimiento)
+        }else{
+            ret+='¿Cómo es su vibración de nacimiento o karma '+r.currentNumNacimiento+'?\n'
+            ret+=getItemJson('per'+r.currentNumNacimiento)
+        }
+        ret+='\n'
+
+        //Nombre
+        ret+=getNumNomText(txtDataSearchNom.text)
+        ret+='\n'
+
+        //Natalicio
+        ret+=getDataJsonNumDia()
+        ret+='\n'
+
+        //Firma
+        ret+='¿Cómo es la energía de su firma?\n'
+        ret+=getItemJson('firma'+r.currentNumFirma)
+        ret+='\n'
+
+        //Destino
+        ret+='¿Cómo podría ser su destino?\n'
+        ret+=getItemJson('dest'+r.currentNumDestino)
+        ret+='\n'
+
+
+        //Lista de 100 años personales
+        ret+=mkDataList()
+        ret+='\n'
+        return ret
     }
 }

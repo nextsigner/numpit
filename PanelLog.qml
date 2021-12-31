@@ -32,6 +32,7 @@ Rectangle{
             font.pixelSize: app.fs*0.5
             color: apps.fontColor
             background: Rectangle{color: 'transparent'}
+            enabled: false
         }
     }
     Rectangle{
