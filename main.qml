@@ -17,6 +17,7 @@ ApplicationWindow {
         property color backgroundColor: 'black'
         property string uFecha
         property string uNom
+        property string uFirma
         property bool numShowFormula: true
     }
     Item{

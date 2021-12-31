@@ -18,10 +18,40 @@ Rectangle {
     property int dir: -1
     property int uRot: 0
 
-    property int currentNumKarma: -1
+    //Número total de la fecha de nacimiento
+    property int currentNumNacimiento: -1
+
+    //Numero total de Nombre
+    property int currentNumNombre: -1
+
+    //Numero de suma de vocales de nombre
+    property int currentNumNombreInt: -1
+
+    //Numero de suma de consonantes de nombre
+    property int currentNumNombreExt: -1
+
+    //Número total de nacimiento y nombre
+    property int currentNumDestino: -1
+
+    //Numero de suma de letras de firma
+    property int currentNumFirma: -1
+
+    //Pinaculos
+    property int currentPin1: -1
+    property int currentPin2: -1
+    property int currentPin3: -1
+    property int currentPin4: -1
+
+    property int currentNumPersonalidad: -1
     property int currentNumAnioPersonal: -1
     property bool esMaestro: false
 
+    onCurrentNumNacimientoChanged: {
+        calcularPersonalidad()
+    }
+    onCurrentNumNombreChanged: {
+        calcularPersonalidad()
+    }
     onCurrentNumAnioPersonalChanged: {
         currentNum=currentNumAnioPersonal-1
     }
@@ -31,7 +61,7 @@ Rectangle {
         let a = currentDate.getFullYear()
         let f = d + '/' + m + '/' + a
         let aGetNums=JS.getNums(f)
-        currentNumKarma=aGetNums[0]
+        currentNumNacimiento=aGetNums[0]
         //txtDataDia.text=d
     }
     MouseArea{
@@ -95,74 +125,75 @@ Rectangle {
                                         anchors.centerIn: parent
                                         Keys.onReturnPressed: {
                                             if(text==='')return
-                                            panelLog.l(getNumNomText(text))
+                                            //panelLog.l(getNumNomText(text))
                                         }
                                         onTextChanged: {
-                                            let mfecha=text.split('.')
-                                            if(!mfecha[0]||!mfecha[1]||!mfecha[2]||mfecha[2].length<4){
-                                                f0.text=''
-                                                currentNumKarma=-1
-                                                return
-                                            }
-                                            let d=mfecha[0]
-                                            let m=mfecha[1]
-                                            let a = mfecha[2]
-                                            let sf=''+d+'/'+m+'/'+a
-                                            let aGetNums=JS.getNums(sf)
-                                            currentNumKarma=aGetNums[0]
-                                            let dateP = new Date(parseInt(txtDataSearchFechaAP.text), m - 1, d, 0, 1)
-                                            //controlTimeYear.currentDate=dateP
-                                            r.currentDate = dateP
-                                            let msfd=(''+d).split('')
-                                            let sfd=''+msfd[0]
-                                            if(msfd.length>1){
-                                                sfd +='+'+msfd[1]
-                                            }
-                                            let msfm=(''+m).split('')
-                                            let sfm=''+msfm[0]
-                                            if(msfm.length>1){
-                                                sfm +='+'+msfm[1]
-                                            }
-                                            //let msform=(''+a).split('')
-                                            let msfa=(''+a).split('')
-                                            let sfa=''+msfa[0]
-                                            if(msfa.length>1){
-                                                sfa +='+'+msfa[1]
-                                            }
-                                            if(msfa.length>2){
-                                                sfa +='+'+msfa[2]
-                                            }
-                                            if(msfa.length>3){
-                                                sfa +='+'+msfa[3]
-                                            }
-                                            let sform= sfd + '+' + sfm + '+' + sfa//msform[0] + '+' + msform[1] + '+'  + msform[2]+ '+'  + msform[3]
-                                            let sum=0
-                                            let mSum=sform.split('+')
-                                            for(var i=0;i<mSum.length;i++){
-                                                sum+=parseInt(mSum[i])
-                                            }
-                                            let mCheckSum=(''+sum).split('')
-                                            if(mCheckSum.length>1){
-                                                if(sum===11||sum===22||sum===33){
-                                                    //r.esMaestro=true
-                                                }
-                                                let dobleDigSum=parseInt(mCheckSum[0])+parseInt(mCheckSum[1])
-                                                sform+='='+sum+'='+dobleDigSum
-                                                let mCheckSum2=(''+dobleDigSum).split('')
-                                                if(mCheckSum2.length>1){
-                                                    let dobleDigSum2=parseInt(mCheckSum2[0])+parseInt(mCheckSum2[1])
-                                                    sform+='='+dobleDigSum2
-                                                    currentNumKarma=dobleDigSum2
-                                                }else{
-                                                    currentNumKarma=dobleDigSum
-                                                }
+                                            //setNumNac()
+//                                            let mfecha=text.split('.')
+//                                            if(!mfecha[0]||!mfecha[1]||!mfecha[2]||mfecha[2].length<4){
+//                                                f0.text=''
+//                                                currentNumNacimiento=-1
+//                                                return
+//                                            }
+//                                            let d=mfecha[0]
+//                                            let m=mfecha[1]
+//                                            let a = mfecha[2]
+//                                            let sf=''+d+'/'+m+'/'+a
+//                                            let aGetNums=JS.getNums(sf)
+//                                            currentNumNacimiento=aGetNums[0]
+//                                            let dateP = new Date(parseInt(txtDataSearchFechaAP.text), m - 1, d, 0, 1)
+//                                            //controlTimeYear.currentDate=dateP
+//                                            r.currentDate = dateP
+//                                            let msfd=(''+d).split('')
+//                                            let sfd=''+msfd[0]
+//                                            if(msfd.length>1){
+//                                                sfd +='+'+msfd[1]
+//                                            }
+//                                            let msfm=(''+m).split('')
+//                                            let sfm=''+msfm[0]
+//                                            if(msfm.length>1){
+//                                                sfm +='+'+msfm[1]
+//                                            }
+//                                            //let msform=(''+a).split('')
+//                                            let msfa=(''+a).split('')
+//                                            let sfa=''+msfa[0]
+//                                            if(msfa.length>1){
+//                                                sfa +='+'+msfa[1]
+//                                            }
+//                                            if(msfa.length>2){
+//                                                sfa +='+'+msfa[2]
+//                                            }
+//                                            if(msfa.length>3){
+//                                                sfa +='+'+msfa[3]
+//                                            }
+//                                            let sform= sfd + '+' + sfm + '+' + sfa//msform[0] + '+' + msform[1] + '+'  + msform[2]+ '+'  + msform[3]
+//                                            let sum=0
+//                                            let mSum=sform.split('+')
+//                                            for(var i=0;i<mSum.length;i++){
+//                                                sum+=parseInt(mSum[i])
+//                                            }
+//                                            let mCheckSum=(''+sum).split('')
+//                                            if(mCheckSum.length>1){
+//                                                if(sum===11||sum===22||sum===33){
+//                                                    //r.esMaestro=true
+//                                                }
+//                                                let dobleDigSum=parseInt(mCheckSum[0])+parseInt(mCheckSum[1])
+//                                                sform+='='+sum+'='+dobleDigSum
+//                                                let mCheckSum2=(''+dobleDigSum).split('')
+//                                                if(mCheckSum2.length>1){
+//                                                    let dobleDigSum2=parseInt(mCheckSum2[0])+parseInt(mCheckSum2[1])
+//                                                    sform+='='+dobleDigSum2
+//                                                    currentNumNacimiento=dobleDigSum2
+//                                                }else{
+//                                                    currentNumNacimiento=dobleDigSum
+//                                                }
 
-                                            }else{
-                                                currentNumKarma=sum
-                                            }
-                                            f0.text=sform
-                                            apps.uFecha=txtDataSearchFecha.text
-                                            calcularAP()
+//                                            }else{
+//                                                currentNumNacimiento=sum
+//                                            }
+//                                            f0.text=sform
+//                                            apps.uFecha=txtDataSearchFecha.text
+//                                            calcularAP()
                                         }
                                         onFocusChanged: {
                                             if(focus)selectAll()
@@ -182,7 +213,7 @@ Rectangle {
 
                             Text{
                                 id: labelFNTS
-                                text: r.currentDate.toString()
+                                text: r.currentDate?r.currentDate.toString():''
                                 color: apps.fontColor
                                 font.pixelSize: app.fs*0.25
                                 anchors.horizontalCenter: parent.horizontalCenter
@@ -213,7 +244,7 @@ Rectangle {
                                     color: apps.backgroundColor
                                     anchors.verticalCenter: parent.verticalCenter
                                     Text{
-                                        text: '<b>'+r.currentNumKarma+'</b>'
+                                        text: '<b>'+r.currentNumNacimiento+'</b>'
                                         font.pixelSize: parent.width*0.8
                                         color: apps.fontColor
                                         anchors.centerIn: parent
@@ -223,6 +254,129 @@ Rectangle {
                         }
                     }
                 }
+            }
+            Rectangle{
+                id: xFormNom
+                width: xForm.width
+                height: colNom.height+app.fs
+                color: 'transparent'
+                border.width: 2
+                border.color: apps.fontColor
+                radius: app.fs*0.2
+                Column{
+                    id: colNom
+                    spacing: app.fs*0.75
+                    anchors.centerIn: parent
+                    Text{
+                        text: '<b>Calcular Nombre</b>'
+                        color: apps.fontColor
+                        font.pixelSize: app.fs*0.5
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                    Rectangle{
+                        id:xTiNombre
+                        width: xForm.width-app.fs*0.5
+                        height: app.fs*1.2
+                        color: apps.backgroundColor
+                        border.width: 2
+                        border.color: apps.fontColor
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Text{
+                            text: '<b>Nombre:</b>'
+                            color: apps.fontColor
+                            font.pixelSize: app.fs*0.25
+                            anchors.bottom: parent.top
+                            anchors.bottomMargin: app.fs*0.25
+                        }
+                        TextInput {
+                            id: txtDataSearchNom
+                            text: apps.uNom
+                            font.pixelSize: app.fs*0.5
+                            width: parent.width-app.fs*0.2
+                            wrapMode: Text.WordWrap
+                            color: apps.fontColor
+                            focus: false
+                            anchors.centerIn: parent
+                            Keys.onReturnPressed: {
+                                if(text==='')return
+                                //panelLog.l(getNumNomText(text))
+                                apps.uNom=text
+                            }
+                            onTextChanged: {
+                                //panelLog.l(getNumNomText(text))
+                                apps.uNom=text
+                            }
+                            onFocusChanged: {
+                                if(focus)selectAll()
+                            }
+                            Rectangle{
+                                width: parent.width+app.fs
+                                height: parent.height+app.fs
+                                color: 'transparent'
+                                //border.width: 2
+                                //border.color: 'white'
+                                z: parent.z-1
+                                anchors.centerIn: parent
+                            }
+                        }
+                    }
+                    Rectangle{
+                        id:xTiFirma
+                        width: xForm.width-app.fs*0.5
+                        height: app.fs*1.2
+                        color: apps.backgroundColor
+                        border.width: 2
+                        border.color: apps.fontColor
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Text{
+                            text: '<b>Firma:</b>'
+                            color: apps.fontColor
+                            font.pixelSize: app.fs*0.25
+                            anchors.bottom: parent.top
+                            anchors.bottomMargin: app.fs*0.25
+                        }
+                        TextInput {
+                            id: txtDataSearchFirma
+                            text: apps.uFirma
+                            font.pixelSize: app.fs*0.5
+                            width: parent.width-app.fs*0.2
+                            wrapMode: Text.WordWrap
+                            color: apps.fontColor
+                            focus: false
+                            anchors.centerIn: parent
+                            Keys.onReturnPressed: {
+                                if(text==='')return
+                                //panelLog.l(getNumNomText(text))
+                                apps.uNom=text
+                            }
+                            onTextChanged: {
+                                //panelLog.l(getNumNomText(text))
+                                apps.uFirma=text
+                            }
+                            onFocusChanged: {
+                                if(focus)selectAll()
+                            }
+                            Rectangle{
+                                width: parent.width+app.fs
+                                height: parent.height+app.fs
+                                color: 'transparent'
+                                //border.width: 2
+                                //border.color: 'white'
+                                z: parent.z-1
+                                anchors.centerIn: parent
+                            }
+                        }
+                    }
+                }
+            }
+            Text{
+                id: txtPersonalidad
+                text: '<b>Personalidad:</b> '+r.currentNumPersonalidad+'<br /><b>N° de Nombre:</b> '+r.currentNumNombre+'<br /><b>Interior:</b> '+r.currentNumNombreInt+'<br /><b>Exterior:</b> '+r.currentNumNombreExt+'<br /><b>N° de Firma:</b> '+r.currentNumFirma+'<br /><b>Destino:</b> '+r.currentNumDestino
+                color: apps.fontColor
+                font.pixelSize: app.fs*0.5
+                width: parent.width-app.fs
+                textFormat: Text.RichText
+                anchors.horizontalCenter: parent.horizontalCenter
             }
             Rectangle{
                 id: xAP
@@ -337,72 +491,6 @@ Rectangle {
                 }
             }
             Rectangle{
-                id: xFormNom
-                width: xForm.width
-                height: colNom.height+app.fs
-                color: 'transparent'
-                border.width: 2
-                border.color: apps.fontColor
-                radius: app.fs*0.2
-                Column{
-                    id: colNom
-                    spacing: app.fs*0.5
-                    anchors.centerIn: parent
-                    Text{
-                        text: '<b>Calcular Nombre</b>'
-                        color: apps.fontColor
-                        font.pixelSize: app.fs*0.5
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                    Rectangle{
-                        id:xTiNombre
-                        width: xForm.width-app.fs*0.5
-                        height: app.fs*1.2
-                        color: apps.backgroundColor
-                        border.width: 2
-                        border.color: apps.fontColor
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        Text{
-                            text: '<b>Nombre:</b>'
-                            color: apps.fontColor
-                            font.pixelSize: app.fs*0.25
-                            anchors.bottom: parent.top
-                            anchors.bottomMargin: app.fs*0.25
-                        }
-                        TextInput {
-                            id: txtDataSearchNom
-                            text: apps.uNom
-                            font.pixelSize: app.fs*0.5
-                            width: parent.width-app.fs*0.2
-                            wrapMode: Text.WordWrap
-                            color: apps.fontColor
-                            focus: false
-                            anchors.centerIn: parent
-                            Keys.onReturnPressed: {
-                                if(text==='')return
-                                panelLog.l(getNumNomText(text))
-                                apps.uNom=text
-                            }
-                            onTextChanged: {
-                                apps.uNom=text
-                            }
-                            onFocusChanged: {
-                                if(focus)selectAll()
-                            }
-                            Rectangle{
-                                width: parent.width+app.fs
-                                height: parent.height+app.fs
-                                color: 'transparent'
-                                //border.width: 2
-                                //border.color: 'white'
-                                z: parent.z-1
-                                anchors.centerIn: parent
-                            }
-                        }
-                    }
-                }
-            }
-            Rectangle{
                 id: xBtns
                 width: parent.width//-app.fs*0.5
                 height: colBtns.height+app.fs
@@ -471,12 +559,29 @@ Rectangle {
                             onClicked: {
                                 panelLog.clear()
                                 if(checkBoxFormula.checked){
-                                    panelLog.l('Personalidad '+r.currentNumKarma+'\n')
+                                    panelLog.l('Personalidad '+r.currentNumPersonalidad+'\n')
                                     panelLog.l('Fórmula: '+f0.text+'\n')
-                                    panelLog.l(getItemJson('per'+r.currentNumKarma))
+                                    panelLog.l(getItemJson('per'+r.currentNumPersonalidad))
                                 }else{
                                     panelLog.l('¿Cómo es su personalidad?\n')
-                                    panelLog.l(getItemJson('per'+r.currentNumKarma))
+                                    panelLog.l(getItemJson('per'+r.currentNumPersonalidad))
+                                }
+                                panelLog.visible=true
+                                panelLog.flk.contentY=0
+                            }
+                        }
+                        Button{
+                            text:  'Nacimiento/Karma'
+                            anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                panelLog.clear()
+                                if(checkBoxFormula.checked){
+                                    panelLog.l('N° de Nacimiento/Karma '+r.currentNumNacimiento+'\n')
+                                    panelLog.l('Fórmula: '+f0.text+'\n')
+                                    panelLog.l(getItemJson('per'+r.currentNumNacimiento))
+                                }else{
+                                    panelLog.l('¿Cómo es su vibración de nacimiento o karma '+r.currentNumNacimiento+'?\n')
+                                    panelLog.l(getItemJson('per'+r.currentNumNacimiento))
                                 }
                                 panelLog.visible=true
                                 panelLog.flk.contentY=0
@@ -504,12 +609,22 @@ Rectangle {
 
                                 //Personalidad
                                 if(checkBoxFormula.checked){
-                                    panelLog.l('Personalidad '+r.currentNumKarma+'\n')
+                                    panelLog.l('Personalidad '+r.currentNumPersonalidad+'\n')
                                     panelLog.l('Fórmula: '+f0.text+'\n')
-                                    panelLog.l(getItemJson('per'+r.currentNumKarma))
+                                    panelLog.l(getItemJson('per'+r.currentNumPersonalidad))
                                 }else{
                                     panelLog.l('¿Cómo es su personalidad?\n')
-                                    panelLog.l(getItemJson('per'+r.currentNumKarma))
+                                    panelLog.l(getItemJson('per'+r.currentNumPersonalidad))
+                                }
+
+                                //Número de nacimiento o karma
+                                if(checkBoxFormula.checked){
+                                    panelLog.l('N° de Nacimiento/Karma '+r.currentNumNacimiento+'\n')
+                                    panelLog.l('Fórmula: '+f0.text+'\n')
+                                    panelLog.l(getItemJson('per'+r.currentNumNacimiento))
+                                }else{
+                                    panelLog.l('¿Cómo es su vibración de nacimiento o karma '+r.currentNumNacimiento+'?\n')
+                                    panelLog.l(getItemJson('per'+r.currentNumNacimiento))
                                 }
                                 panelLog.l('\n')
 
@@ -520,6 +635,17 @@ Rectangle {
                                 //Natalicio
                                 panelLog.l(getDataJsonNumDia())
                                 panelLog.l('\n')
+
+                                //Firma
+                                panelLog.l('¿Cómo es la energía de su firma?\n')
+                                panelLog.l(getItemJson('firma'+r.currentNumFirma))
+                                panelLog.l('\n')
+
+                                //Destino
+                                panelLog.l('¿Cómo podría ser su destino?\n')
+                                panelLog.l(getItemJson('dest'+r.currentNumDestino))
+                                panelLog.l('\n')
+
 
                                 //Lista de 100 años personales
                                 panelLog.l(mkDataList())
@@ -549,6 +675,15 @@ Rectangle {
                     }
                 }
             }
+        }
+    }
+    Timer{
+        id: tCalc
+        running: !panelLog.visible
+        repeat: true
+        interval: 1000
+        onTriggered: {
+            calc()
         }
     }
     Component.onCompleted: {
@@ -664,8 +799,23 @@ Rectangle {
         }
         //panelLog.l('st:'+st+' vtv:'+vtv)
         dataInt+=getDataNum(st, vtv)
+        r.currentNumNombreInt=vtv
         //panelLog.l('st2:'+st2+' vtc: '+vtc)
         dataExt+=getDataNum(st2, vtc)
+        r.currentNumNombreExt=vtc
+        let nunNombre=r.currentNumNombreInt+r.currentNumNombreExt
+        if(nunNombre>9){
+            m0=(''+nunNombre).split('')
+            nunNombre=parseInt(m0[0])+parseInt(m0[1])
+        }
+        if(nunNombre>9){
+            m0=(''+nunNombre).split('')
+            nunNombre=parseInt(m0[0])+parseInt(m0[1])
+        }
+        r.currentNumNombre=nunNombre
+        let numDestino=nunNombre + r.currentNumFirma
+        r.currentNumDestino=numDestino
+
         if(checkBoxFormula.checked){
             ret+='Vocales: '+av.toString()+'\n'
             ret+='Fórmula de Vocales: '+sfv+'\n'
@@ -679,6 +829,43 @@ Rectangle {
             ret+='¿Cómo es la forma de ser de '+txtDataSearchNom.text+' hacia afuera?\n\n'+dataExt+'\n\n'
         }
         return ret
+    }
+    function setNumFirma(){
+        let t=txtDataSearchFirma.text.toUpperCase().replace(/ /g, '')//.replace(/./g, '')
+        let av=[]
+        let ml=t.split('')
+        //console.log('vtv firma:'+ml)
+        for(var i=0;i<ml.length;i++){
+            let l=ml[i]
+            av.push(l)
+        }
+        let rc=0
+        let vtv=0
+        for(i=0;i<av.length;i++){
+            rc=gvl(av[i])
+            vtv+=rc
+            console.log('vtv firma:'+vtv)
+        }
+
+        let m0
+        if(vtv===11||vtv===33){
+            dataInt='En su interior nació con el número Maestro '+vtv+'\n'
+            dataInt+=getDataNum('intm', vtv)+'\n\n'
+            //vtv=1
+        }
+        if(vtv===22||vtv===44){
+            return vtv
+        }
+        if(vtv>9){
+            m0=(''+vtv).split('')
+            vtv=parseInt(m0[0])+parseInt(m0[1])
+
+        }
+        if(vtv>9){
+            m0=(''+vtv).split('')
+            vtv=parseInt(m0[0])+parseInt(m0[1])
+        }
+        return vtv
     }
     function getDataJsonNumDia(){
         let ret=''
@@ -733,7 +920,7 @@ Rectangle {
         return ret
     }
     function gvl(l){
-        let r=-1
+        let r=0
         let col1=['A', 'J', 'R']
         let col2=['B', 'K', 'S']
         let col3=['C', 'L', 'T']
@@ -846,11 +1033,11 @@ Rectangle {
         let a = date.getFullYear()
         let f = d + '/' + m + '/' + a
         let aGetNums=JS.getNums(f)
-        let vCurrentNumKarma=aGetNums[0]
-        panelLog.l('Número de Karma '+vCurrentNumKarma+'\n')
+        let vcurrentNumNacimiento=aGetNums[0]
+        panelLog.l('Número de Karma '+vcurrentNumNacimiento+'\n')
         panelLog.l(getNumNomText(nom))
         panelLog.l('¿Cómo es su personalidad?\n')
-        panelLog.l(getItemJson('per'+vCurrentNumKarma))
+        panelLog.l(getItemJson('per'+vcurrentNumNacimiento))
     }
     function calcularAP(){
         r.esMaestro=false
@@ -916,6 +1103,88 @@ Rectangle {
 
         let sp='Período: Desde el cumpleaños del día '+d+'/'+m+'/'+a+' hasta el día '+d+'/'+m+'/'+parseInt(a + 1)
         panelLog.l('Año: '+a+' - Edad: '+edad+' - Ciclo: '+parseInt(r.currentNum +1)+'\n'+sp+'\nCálculo: '+f1.text+'\n'+aDes[r.currentNum]+'\n')
+
+    }
+    function calcularPersonalidad(){
+        let ret=r.currentNumNacimiento + r.currentNumNombre
+        if(ret>9){
+            let m0=(''+ret).split('')
+            ret=parseInt(m0[0]+m0[1])
+        }
+        r.currentNumPersonalidad=ret
+    }
+    function setNumNac(){
+        let mfecha=txtDataSearchFecha.text.split('.')
+        if(!mfecha[0]||!mfecha[1]||!mfecha[2]||mfecha[2].length<4){
+            f0.text=''
+            currentNumNacimiento=-1
+            return
+        }
+        let d=mfecha[0]
+        let m=mfecha[1]
+        let a = mfecha[2]
+        let sf=''+d+'/'+m+'/'+a
+        let aGetNums=JS.getNums(sf)
+        currentNumNacimiento=aGetNums[0]
+        let dateP = new Date(parseInt(txtDataSearchFechaAP.text), m - 1, d, 0, 1)
+        //controlTimeYear.currentDate=dateP
+        r.currentDate = dateP
+        let msfd=(''+d).split('')
+        let sfd=''+msfd[0]
+        if(msfd.length>1){
+            sfd +='+'+msfd[1]
+        }
+        let msfm=(''+m).split('')
+        let sfm=''+msfm[0]
+        if(msfm.length>1){
+            sfm +='+'+msfm[1]
+        }
+        //let msform=(''+a).split('')
+        let msfa=(''+a).split('')
+        let sfa=''+msfa[0]
+        if(msfa.length>1){
+            sfa +='+'+msfa[1]
+        }
+        if(msfa.length>2){
+            sfa +='+'+msfa[2]
+        }
+        if(msfa.length>3){
+            sfa +='+'+msfa[3]
+        }
+        let sform= sfd + '+' + sfm + '+' + sfa//msform[0] + '+' + msform[1] + '+'  + msform[2]+ '+'  + msform[3]
+        let sum=0
+        let mSum=sform.split('+')
+        for(var i=0;i<mSum.length;i++){
+            sum+=parseInt(mSum[i])
+        }
+        let mCheckSum=(''+sum).split('')
+        if(mCheckSum.length>1){
+            if(sum===11||sum===22||sum===33){
+                //r.esMaestro=true
+            }
+            let dobleDigSum=parseInt(mCheckSum[0])+parseInt(mCheckSum[1])
+            sform+='='+sum+'='+dobleDigSum
+            let mCheckSum2=(''+dobleDigSum).split('')
+            if(mCheckSum2.length>1){
+                let dobleDigSum2=parseInt(mCheckSum2[0])+parseInt(mCheckSum2[1])
+                sform+='='+dobleDigSum2
+                currentNumNacimiento=dobleDigSum2
+            }else{
+                currentNumNacimiento=dobleDigSum
+            }
+
+        }else{
+            currentNumNacimiento=sum
+        }
+        f0.text=sform
+        apps.uFecha=txtDataSearchFecha.text
+        calcularAP()
+    }
+    function calc(){
+        r.currentNumFirma=setNumFirma()
+        setNumNac()
+        let dataNombre=getNumNomText(txtDataSearchNom.text)
+
 
     }
 }
