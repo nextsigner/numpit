@@ -43,6 +43,10 @@ Rectangle {
     property int currentPin2: -1
     property int currentPin3: -1
     property int currentPin4: -1
+    property int currentTipoPin1: -1
+    property int currentTipoPin2: -1
+    property int currentTipoPin3: -1
+    property int currentTipoPin4: -1
 
     property int currentNumPersonalidad: -1
     property int currentNumAnioPersonal: -1
@@ -228,7 +232,7 @@ Rectangle {
                             Text{
                                 id: f0
                                 color: apps.fontColor
-                                font.pixelSize: app.fs*0.8
+                                font.pixelSize: app.fs*0.6
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
                             Row{
@@ -504,7 +508,7 @@ Rectangle {
                     Text{
                         id: f1
                         color: apps.fontColor
-                        font.pixelSize: app.fs*0.8
+                        font.pixelSize: app.fs*0.6
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
@@ -1130,11 +1134,15 @@ Rectangle {
         let m0
         if(ret>9){
             m0=(''+ret).split('')
-            ret=parseInt(m0[0]+m0[1])
+            ret=parseInt(m0[0]) + parseInt(m0[1])
         }
         if(ret>9){
             m0=(''+ret).split('')
-            ret=parseInt(m0[0]+m0[1])
+            ret=parseInt(m0[0]) + parseInt(m0[1])
+        }
+        if(ret>9){
+            m0=(''+ret).split('')
+            ret=parseInt(m0[0]) + parseInt(m0[1])
         }
         r.currentNumPersonalidad=ret
     }
@@ -1209,8 +1217,7 @@ Rectangle {
         r.currentNumFirma=setNumFirma()
         setNumNac()
         let dataNombre=getNumNomText(txtDataSearchNom.text)
-
-
+        setPins()
     }
     function getTodo(){
         let ret=''
@@ -1238,7 +1245,7 @@ Rectangle {
 
         //Nombre
         ret+=getNumNomText(txtDataSearchNom.text)
-        ret+='\n\n'
+        ret+='\n'
 
         //Natalicio
         ret+=getDataJsonNumDia()
@@ -1254,10 +1261,105 @@ Rectangle {
         ret+=getItemJson('dest'+r.currentNumDestino)
         ret+='\n\n'
 
+        //Pinaculos
+        ret+='Pináculos\n\n'
+        ret+='1° Pináculo del tipo '+r.currentTipoPin1+': Desde los '+r.currentPin1+' hasta '+parseInt(r.currentPin2)+' años.\n'
+        ret+=getItemJson('pin'+r.currentTipoPin1)
+        ret+='\n\n'
+
+        ret+='2° Pináculo del tipo '+r.currentTipoPin2+': Desde los '+r.currentPin2+' hasta '+parseInt(r.currentPin3)+' años.\n'
+        ret+=getItemJson('pin'+r.currentTipoPin2)
+        ret+='\n\n'
+
+        ret+='3° Pináculo del tipo '+r.currentTipoPin3+': Desde los '+r.currentPin3+' hasta '+parseInt(r.currentPin4)+' años.\n'
+        ret+=getItemJson('pin'+r.currentTipoPin3)
+        ret+='\n\n'
+
+        ret+='4° Pináculo del tipo '+r.currentTipoPin4+': Desde los '+r.currentPin4+' hasta el final de la vida.\n'
+        ret+=getItemJson('pin'+r.currentTipoPin4)
+        ret+='\n\n'
+
+        ret+='\n'
+
 
         //Lista de 100 años personales
         ret+=mkDataList()
         ret+='\n\n'
         return ret
+    }
+    function setPins(){
+        let p1=36-r.currentNumNacimiento
+        r.currentPin1=p1
+        r.currentPin2=p1+9
+        r.currentPin3=p1+9+9
+        r.currentPin4=p1+9+9+9
+        let m0
+
+        let mfecha=txtDataSearchFecha.text.split('.')
+
+        //Calculando tipo de pináculo 1
+        let tPin=parseInt(mfecha[0]) + parseInt(mfecha[1])
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        r.currentTipoPin1=tPin
+
+        //Calculando tipo de pináculo 2
+        let mAnio=(''+mfecha[2]).split('')
+        tPin=parseInt(mfecha[0]) + parseInt(mAnio[0]) + parseInt(mAnio[1]) + parseInt(mAnio[2]) + parseInt(mAnio[3])
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        r.currentTipoPin2=tPin
+
+        //Calculando tipo de pináculo 3
+        tPin=r.currentTipoPin1 + r.currentTipoPin2
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        r.currentTipoPin3=tPin
+
+        //Calculando tipo de pináculo 4
+        tPin=parseInt(mfecha[1]) + parseInt(mAnio[0]) + parseInt(mAnio[1]) + parseInt(mAnio[2]) + parseInt(mAnio[3])
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        if(tPin>9){
+            m0=(''+tPin).split('')
+            tPin=parseInt(m0[0])+parseInt(m0[1])
+        }
+        r.currentTipoPin4=tPin
     }
 }
