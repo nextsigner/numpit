@@ -274,6 +274,7 @@ Rectangle {
                 border.width: 2
                 border.color: apps.fontColor
                 radius: app.fs*0.2
+                anchors.horizontalCenter: parent.horizontalCenter
                 Column{
                     id: colNom
                     spacing: app.fs*0.75
@@ -830,14 +831,30 @@ Rectangle {
         let nunNombre=r.currentNumNombreInt+r.currentNumNombreExt
         if(nunNombre>9){
             m0=(''+nunNombre).split('')
-            nunNombre=parseInt(m0[0])+parseInt(m0[1])
+            nunNombre=parseInt(m0[0]) + parseInt(m0[1])
         }
         if(nunNombre>9){
             m0=(''+nunNombre).split('')
-            nunNombre=parseInt(m0[0])+parseInt(m0[1])
+            nunNombre=parseInt(m0[0]) + parseInt(m0[1])
+        }
+        if(nunNombre>9){
+            m0=(''+nunNombre).split('')
+            nunNombre=parseInt(m0[0]) + parseInt(m0[1])
         }
         r.currentNumNombre=nunNombre
         let numDestino=nunNombre + r.currentNumFirma
+        if(numDestino>9){
+            m0=(''+numDestino).split('')
+            numDestino=parseInt(m0[0]) + parseInt(m0[1])
+        }
+        if(numDestino>9){
+            m0=(''+numDestino).split('')
+            numDestino=parseInt(m0[0]) + parseInt(m0[1])
+        }
+        if(numDestino>9){
+            m0=(''+numDestino).split('')
+            numDestino=parseInt(m0[0]) + parseInt(m0[1])
+        }
         r.currentNumDestino=numDestino
 
         if(checkBoxFormula.checked){
@@ -1245,7 +1262,7 @@ Rectangle {
 
         //Nombre
         ret+=getNumNomText(txtDataSearchNom.text)
-        ret+='\n'
+        //ret+='\n'
 
         //Natalicio
         ret+=getDataJsonNumDia()
