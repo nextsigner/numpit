@@ -209,7 +209,8 @@ function getJSON(fileLocation, comp, s, c, nomCuerpo) {
 function showSABIANOS(numSign, numDegree){
     panelSabianos.numSign=numSign
     panelSabianos.numDegree=numDegree
-    panelSabianos.state='show'
+    //panelSabianos.state='show'
+    sv.currentIndex=1
     panelSabianos.loadData()
 }
 function quitarAcentos(cadena){

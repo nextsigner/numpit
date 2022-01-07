@@ -26,9 +26,11 @@ Rectangle {
 
     //Numero de suma de vocales de nombre
     property int currentNumNombreInt: -1
+    property int currentNumNombreIntM: -1
 
     //Numero de suma de consonantes de nombre
     property int currentNumNombreExt: -1
+    property int currentNumNombreExtM: -1
 
     //Número total de nacimiento y nombre
     property int currentNumDestino: -1
@@ -45,6 +47,9 @@ Rectangle {
     property int currentNumPersonalidad: -1
     property int currentNumAnioPersonal: -1
     property bool esMaestro: false
+
+    property string sFormulaInt : ''
+    property string sFormulaExt: ''
 
     onCurrentNumNacimientoChanged: {
         calcularPersonalidad()
@@ -125,9 +130,11 @@ Rectangle {
                                         anchors.centerIn: parent
                                         Keys.onReturnPressed: {
                                             if(text==='')return
+                                            calc()
                                             //panelLog.l(getNumNomText(text))
                                         }
                                         onTextChanged: {
+                                            calc()
                                             //setNumNac()
 //                                            let mfecha=text.split('.')
 //                                            if(!mfecha[0]||!mfecha[1]||!mfecha[2]||mfecha[2].length<4){
@@ -300,10 +307,12 @@ Rectangle {
                             Keys.onReturnPressed: {
                                 if(text==='')return
                                 //panelLog.l(getNumNomText(text))
+                                calc()
                                 apps.uNom=text
                             }
                             onTextChanged: {
                                 //panelLog.l(getNumNomText(text))
+                                calc()
                                 apps.uNom=text
                             }
                             onFocusChanged: {
@@ -347,10 +356,12 @@ Rectangle {
                             Keys.onReturnPressed: {
                                 if(text==='')return
                                 //panelLog.l(getNumNomText(text))
+                                calc()
                                 apps.uNom=text
                             }
                             onTextChanged: {
                                 //panelLog.l(getNumNomText(text))
+                                calc()
                                 apps.uFirma=text
                             }
                             onFocusChanged: {
@@ -371,12 +382,21 @@ Rectangle {
             }
             Text{
                 id: txtPersonalidad
-                text: '<b>Personalidad:</b> '+r.currentNumPersonalidad+'<br /><b>N° de Nombre:</b> '+r.currentNumNombre+'<br /><b>Interior:</b> '+r.currentNumNombreInt+'<br /><b>Exterior:</b> '+r.currentNumNombreExt+'<br /><b>N° de Firma:</b> '+r.currentNumFirma+'<br /><b>Destino:</b> '+r.currentNumDestino
+                text: opacity<1.0?'Esperando...':'<b>Personalidad:</b> '+r.currentNumPersonalidad+'<br /><b>N° de Nombre:</b> '+r.currentNumNombre+'<br /><b>Interior:</b> '+r.sFormulaInt+''+r.currentNumNombreInt+'<br /><b>Exterior:</b> '+r.sFormulaExt+''+r.currentNumNombreExt+'<br /><b>N° de Firma:</b> '+r.currentNumFirma+'<br /><b>Destino:</b> '+r.currentNumDestino
                 color: apps.fontColor
                 font.pixelSize: app.fs*0.5
                 width: parent.width-app.fs
                 textFormat: Text.RichText
                 anchors.horizontalCenter: parent.horizontalCenter
+                opacity: r.currentNumPersonalidad!==-1&&r.currentNumNombre!==-1&&r.currentNumNombreInt!==-1&&r.currentNumNombreExt!==-1&&r.currentNumFirma!==-1&&r.currentNumDestino!==-1?1.0:0.5
+            }
+            Button{
+                text:  'Calcular'
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: txtPersonalidad.opacity<1.0
+                onClicked: {
+                    calc()
+                }
             }
             Rectangle{
                 id: xAP
@@ -605,6 +625,7 @@ Rectangle {
                             text:  'Calcular todo'
                             anchors.verticalCenter: parent.verticalCenter
                             onClicked: {
+                                calc()
                                 panelLog.clear()
                                 panelLog.l(getTodo())
                                 panelLog.visible=true
@@ -619,6 +640,7 @@ Rectangle {
                             text:  'Guardar todo en archivo'
                             anchors.verticalCenter: parent.verticalCenter
                             onClicked: {
+                                calc()
                                 let fn=unik.getPath(3)+'/'+(txtDataSearchNom.text).replace(/ /g,'_')+'.txt'
 
                                 unik.setFile(fn, getTodo())
@@ -656,7 +678,7 @@ Rectangle {
         repeat: true
         interval: 250
         onTriggered: {
-            calc()
+            //calc()
         }
     }
     Component.onCompleted: {
@@ -682,6 +704,7 @@ Rectangle {
         d = 'AUTOSUFICIENCIA, CONSOLIDACIÓN, CIERRE DE CICLO'
         a.push(d)
         r.aDes=a
+        calc()
     }
     function getNumNomText(text){
         let ret=''
@@ -730,24 +753,39 @@ Rectangle {
         let st2='ext'
         let resM1=-1
         let resM2=-1
+        r.currentNumNombreIntM=-1
+        r.currentNumNombreExtM=-1
+        r.sFormulaInt=''
+        r.sFormulaExt=''
         if(vtv===11||vtv===33){
             dataInt='En su interior nació con el número Maestro '+vtv+'\n'
             dataInt+=getDataNum('intm', vtv)+'\n\n'
+            m0=(''+vtv).split('')
+            r.sFormulaInt='Maestro '+vtv+'='+m0[0]+'+'+m0[1]+'='
+            r.currentNumNombreIntM=vtv
             //vtv=1
         }
         if(vtv===22||vtv===44){
             dataInt='En su interior nació con el número Maestro '+vtv+'\n'
             dataInt+=getDataNum('intm', vtv)+'\n\n'
-            //vtv=2
+            m0=(''+vtv).split('')
+            r.sFormulaInt='Maestro '+vtv+'='+m0[0]+'+'+m0[1]+'='
+            r.currentNumNombreIntM=vtv
         }
         if(vtc===11||vtc===33){
             dataExt='En su exterior nació con el número Maestro '+vtc+'\n'
             dataExt+=getDataNum('extm', vtc)+'\n\n'
+            m0=(''+vtc).split('')
+            r.sFormulaExt='Maestro '+vtc+'='+m0[0]+'+'+m0[1]+'='
+            r.currentNumNombreExtM=vtc
             //vtc=1
         }
         if(vtc===22||vtc===44){
             dataExt='En su exterior nació con el número Maestro '+vtc+'\n'
             dataExt+=getDataNum('extm', vtc)+'\n\n'
+            m0=(''+vtc).split('')
+            r.sFormulaExt='Maestro '+vtc+'='+m0[0]+'+'+m0[1]+'='
+            r.currentNumNombreExtM=vtc
             //vtc=2
         }
         if(vtv>9){
@@ -771,10 +809,19 @@ Rectangle {
             sfc+='='+vtc
         }
         //panelLog.l('st:'+st+' vtv:'+vtv)
-        dataInt+=getDataNum(st, vtv)
+        if(r.currentNumNombreIntM===-1){
+            dataInt+=getDataNum(st, vtv)
+        }else{
+            dataInt+=getDataNum('intm', r.currentNumNombreIntM)
+        }
+
         r.currentNumNombreInt=vtv
         //panelLog.l('st2:'+st2+' vtc: '+vtc)
-        dataExt+=getDataNum(st2, vtc)
+        if(r.currentNumNombreExtM===-1){
+            dataExt+=getDataNum(st2, vtc)
+        }else{
+            dataExt+=getDataNum('extm', r.currentNumNombreExtM)
+        }
         r.currentNumNombreExt=vtc
         let nunNombre=r.currentNumNombreInt+r.currentNumNombreExt
         if(nunNombre>9){
@@ -1009,7 +1056,7 @@ Rectangle {
         let vcurrentNumNacimiento=aGetNums[0]
         panelLog.l('Número de Karma '+vcurrentNumNacimiento+'\n')
         panelLog.l(getNumNomText(nom))
-        panelLog.l('¿Cómo es su personalidad?\n')
+        panelLog.l('¿Cómo es su personalidad?\n\n\n\n\n\n')
         panelLog.l(getItemJson('per'+vcurrentNumNacimiento))
     }
     function calcularAP(){
@@ -1080,8 +1127,13 @@ Rectangle {
     }
     function calcularPersonalidad(){
         let ret=r.currentNumNacimiento + r.currentNumNombre
+        let m0
         if(ret>9){
-            let m0=(''+ret).split('')
+            m0=(''+ret).split('')
+            ret=parseInt(m0[0]+m0[1])
+        }
+        if(ret>9){
+            m0=(''+ret).split('')
             ret=parseInt(m0[0]+m0[1])
         }
         r.currentNumPersonalidad=ret
@@ -1162,49 +1214,50 @@ Rectangle {
     }
     function getTodo(){
         let ret=''
+        ret+='Cuadro Numerológico de '+txtDataSearchNom.text+'\n\n'
         if(checkBoxFormula.checked){
             ret+='Personalidad '+r.currentNumPersonalidad+'\n'
             ret+='Fórmula: '+f0.text+'\n'
             ret+=getItemJson('per'+r.currentNumPersonalidad)
         }else{
-            ret+='¿Cómo es su personalidad?\n'
+            ret+='¿Cómo es su personalidad?\n\n'
             ret+=getItemJson('per'+r.currentNumPersonalidad)
         }
-        ret+='\n'
+        ret+='\n\n'
 
         //Número de nacimiento o karma
         if(checkBoxFormula.checked){
-            ret+='N° de Nacimiento/Karma '+r.currentNumNacimiento+'\n'
+            ret+='N° de Nacimiento/Karma '+r.currentNumNacimiento+'\n\n'
             ret+='Fórmula: '+f0.text+'\n'
             ret+=getItemJson('per'+r.currentNumNacimiento)
         }else{
-            ret+='¿Cómo es su vibración de nacimiento o karma '+r.currentNumNacimiento+'?\n'
+            ret+='¿Cómo es su vibración de nacimiento o karma '+r.currentNumNacimiento+'?\n\n'
             ret+=getItemJson('per'+r.currentNumNacimiento)
         }
-        ret+='\n'
+        ret+='\n\n'
 
         //Nombre
         ret+=getNumNomText(txtDataSearchNom.text)
-        ret+='\n'
+        ret+='\n\n'
 
         //Natalicio
         ret+=getDataJsonNumDia()
-        ret+='\n'
+        ret+='\n\n'
 
         //Firma
-        ret+='¿Cómo es la energía de su firma?\n'
+        ret+='¿Cómo es la energía de su firma?\n\n'
         ret+=getItemJson('firma'+r.currentNumFirma)
-        ret+='\n'
+        ret+='\n\n'
 
         //Destino
-        ret+='¿Cómo podría ser su destino?\n'
+        ret+='¿Cómo podría ser su destino?\n\n'
         ret+=getItemJson('dest'+r.currentNumDestino)
-        ret+='\n'
+        ret+='\n\n'
 
 
         //Lista de 100 años personales
         ret+=mkDataList()
-        ret+='\n'
+        ret+='\n\n'
         return ret
     }
 }
