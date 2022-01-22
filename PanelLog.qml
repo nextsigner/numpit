@@ -24,7 +24,7 @@ Rectangle{
         contentWidth: parent.width
         contentHeight: taLog.contentHeight
         clip: true
-        Text{
+        TextEdit{
             id: taLog
             width: r.width-app.fs//*0.5
             //wrapMode: r.ww?Text.WordWrap:Text.WrapAnywhere
@@ -60,5 +60,9 @@ Rectangle{
     function clear(){
         taLog.text=''
         //taLog.clear()
+    }
+    function cp(){
+        taLog.selectAll()
+        taLog.copy()
     }
 }

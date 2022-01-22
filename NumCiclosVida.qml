@@ -683,6 +683,11 @@ Rectangle {
                                 panelLog.l(getTodo())
                                 panelLog.visible=true
                                 panelLog.flk.contentY=0
+                                if(Qt.platform.os!=='android'){
+                                    clipboard.setText(panelLog.text)
+                                }else{
+                                    panelLog.cp()
+                                }
                             }
                         }
                     }
@@ -701,6 +706,11 @@ Rectangle {
                                 panelLog.l('El archivo se ha guardado en '+fn)
                                 panelLog.visible=true
                                 panelLog.flk.contentY=0
+                                if(Qt.platform.os!=='android'){
+                                    clipboard.setText(panelLog.text)
+                                }else{
+                                    panelLog.cp()
+                                }
                             }
                         }
                     }
@@ -715,10 +725,13 @@ Rectangle {
                         Button{
                             text:  'Copiar'
                             onClicked: {
-                                clipboard.setText(panelLog.text)
+                                if(Qt.platform.os!=='android'){
+                                    clipboard.setText(panelLog.text)
+                                }else{
+                                    panelLog.cp()
+                                }
                             }
                             anchors.verticalCenter: parent.verticalCenter
-
                         }
                     }
                 }
