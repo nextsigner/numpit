@@ -140,71 +140,71 @@ Rectangle {
                                         onTextChanged: {
                                             calc()
                                             //setNumNac()
-//                                            let mfecha=text.split('.')
-//                                            if(!mfecha[0]||!mfecha[1]||!mfecha[2]||mfecha[2].length<4){
-//                                                f0.text=''
-//                                                currentNumNacimiento=-1
-//                                                return
-//                                            }
-//                                            let d=mfecha[0]
-//                                            let m=mfecha[1]
-//                                            let a = mfecha[2]
-//                                            let sf=''+d+'/'+m+'/'+a
-//                                            let aGetNums=JS.getNums(sf)
-//                                            currentNumNacimiento=aGetNums[0]
-//                                            let dateP = new Date(parseInt(txtDataSearchFechaAP.text), m - 1, d, 0, 1)
-//                                            //controlTimeYear.currentDate=dateP
-//                                            r.currentDate = dateP
-//                                            let msfd=(''+d).split('')
-//                                            let sfd=''+msfd[0]
-//                                            if(msfd.length>1){
-//                                                sfd +='+'+msfd[1]
-//                                            }
-//                                            let msfm=(''+m).split('')
-//                                            let sfm=''+msfm[0]
-//                                            if(msfm.length>1){
-//                                                sfm +='+'+msfm[1]
-//                                            }
-//                                            //let msform=(''+a).split('')
-//                                            let msfa=(''+a).split('')
-//                                            let sfa=''+msfa[0]
-//                                            if(msfa.length>1){
-//                                                sfa +='+'+msfa[1]
-//                                            }
-//                                            if(msfa.length>2){
-//                                                sfa +='+'+msfa[2]
-//                                            }
-//                                            if(msfa.length>3){
-//                                                sfa +='+'+msfa[3]
-//                                            }
-//                                            let sform= sfd + '+' + sfm + '+' + sfa//msform[0] + '+' + msform[1] + '+'  + msform[2]+ '+'  + msform[3]
-//                                            let sum=0
-//                                            let mSum=sform.split('+')
-//                                            for(var i=0;i<mSum.length;i++){
-//                                                sum+=parseInt(mSum[i])
-//                                            }
-//                                            let mCheckSum=(''+sum).split('')
-//                                            if(mCheckSum.length>1){
-//                                                if(sum===11||sum===22||sum===33){
-//                                                    //r.esMaestro=true
-//                                                }
-//                                                let dobleDigSum=parseInt(mCheckSum[0])+parseInt(mCheckSum[1])
-//                                                sform+='='+sum+'='+dobleDigSum
-//                                                let mCheckSum2=(''+dobleDigSum).split('')
-//                                                if(mCheckSum2.length>1){
-//                                                    let dobleDigSum2=parseInt(mCheckSum2[0])+parseInt(mCheckSum2[1])
-//                                                    sform+='='+dobleDigSum2
-//                                                    currentNumNacimiento=dobleDigSum2
-//                                                }else{
-//                                                    currentNumNacimiento=dobleDigSum
-//                                                }
+                                            //                                            let mfecha=text.split('.')
+                                            //                                            if(!mfecha[0]||!mfecha[1]||!mfecha[2]||mfecha[2].length<4){
+                                            //                                                f0.text=''
+                                            //                                                currentNumNacimiento=-1
+                                            //                                                return
+                                            //                                            }
+                                            //                                            let d=mfecha[0]
+                                            //                                            let m=mfecha[1]
+                                            //                                            let a = mfecha[2]
+                                            //                                            let sf=''+d+'/'+m+'/'+a
+                                            //                                            let aGetNums=JS.getNums(sf)
+                                            //                                            currentNumNacimiento=aGetNums[0]
+                                            //                                            let dateP = new Date(parseInt(txtDataSearchFechaAP.text), m - 1, d, 0, 1)
+                                            //                                            //controlTimeYear.currentDate=dateP
+                                            //                                            r.currentDate = dateP
+                                            //                                            let msfd=(''+d).split('')
+                                            //                                            let sfd=''+msfd[0]
+                                            //                                            if(msfd.length>1){
+                                            //                                                sfd +='+'+msfd[1]
+                                            //                                            }
+                                            //                                            let msfm=(''+m).split('')
+                                            //                                            let sfm=''+msfm[0]
+                                            //                                            if(msfm.length>1){
+                                            //                                                sfm +='+'+msfm[1]
+                                            //                                            }
+                                            //                                            //let msform=(''+a).split('')
+                                            //                                            let msfa=(''+a).split('')
+                                            //                                            let sfa=''+msfa[0]
+                                            //                                            if(msfa.length>1){
+                                            //                                                sfa +='+'+msfa[1]
+                                            //                                            }
+                                            //                                            if(msfa.length>2){
+                                            //                                                sfa +='+'+msfa[2]
+                                            //                                            }
+                                            //                                            if(msfa.length>3){
+                                            //                                                sfa +='+'+msfa[3]
+                                            //                                            }
+                                            //                                            let sform= sfd + '+' + sfm + '+' + sfa//msform[0] + '+' + msform[1] + '+'  + msform[2]+ '+'  + msform[3]
+                                            //                                            let sum=0
+                                            //                                            let mSum=sform.split('+')
+                                            //                                            for(var i=0;i<mSum.length;i++){
+                                            //                                                sum+=parseInt(mSum[i])
+                                            //                                            }
+                                            //                                            let mCheckSum=(''+sum).split('')
+                                            //                                            if(mCheckSum.length>1){
+                                            //                                                if(sum===11||sum===22||sum===33){
+                                            //                                                    //r.esMaestro=true
+                                            //                                                }
+                                            //                                                let dobleDigSum=parseInt(mCheckSum[0])+parseInt(mCheckSum[1])
+                                            //                                                sform+='='+sum+'='+dobleDigSum
+                                            //                                                let mCheckSum2=(''+dobleDigSum).split('')
+                                            //                                                if(mCheckSum2.length>1){
+                                            //                                                    let dobleDigSum2=parseInt(mCheckSum2[0])+parseInt(mCheckSum2[1])
+                                            //                                                    sform+='='+dobleDigSum2
+                                            //                                                    currentNumNacimiento=dobleDigSum2
+                                            //                                                }else{
+                                            //                                                    currentNumNacimiento=dobleDigSum
+                                            //                                                }
 
-//                                            }else{
-//                                                currentNumNacimiento=sum
-//                                            }
-//                                            f0.text=sform
-//                                            apps.uFecha=txtDataSearchFecha.text
-//                                            calcularAP()
+                                            //                                            }else{
+                                            //                                                currentNumNacimiento=sum
+                                            //                                            }
+                                            //                                            f0.text=sform
+                                            //                                            apps.uFecha=txtDataSearchFecha.text
+                                            //                                            calcularAP()
                                         }
                                         onFocusChanged: {
                                             if(focus)selectAll()
@@ -381,6 +381,52 @@ Rectangle {
                                 z: parent.z-1
                                 anchors.centerIn: parent
                             }
+                        }
+                    }
+                }
+            }
+            Row{
+                spacing: app.fs*0.25
+                //anchors.horizontalCenter: parent.horizontalCenter
+                Text{
+                    text: '<b>Género: </b>'
+                    font.pixelSize: app.fs*0.5
+                    color: 'white'
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Row{
+                    anchors.verticalCenter: parent.verticalCenter
+                    Text{
+                        text: 'Masculino'
+                        font.pixelSize: app.fs*0.25
+                        color: 'white'
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    RadioButton{
+                        id: rbM
+                        font.pixelSize: app.fs*0.25
+                        anchors.verticalCenter: parent.verticalCenter
+                        checked: true
+                        onCheckedChanged: {
+                            if(checked)rbF.checked=false
+                        }
+                    }
+                }
+                Row{
+                    anchors.verticalCenter: parent.verticalCenter
+                    Text{
+                        text: 'Femenino'
+                        font.pixelSize: app.fs*0.25
+                        color: 'white'
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    RadioButton{
+                        id: rbF
+                        font.pixelSize: app.fs*0.25
+                        anchors.verticalCenter: parent.verticalCenter
+                        checked: false
+                        onCheckedChanged: {
+                            if(checked)rbM.checked=false
                         }
                     }
                 }
@@ -599,6 +645,8 @@ Rectangle {
                             text:  'Nacimiento/Karma'
                             anchors.verticalCenter: parent.verticalCenter
                             onClicked: {
+                                let genero='m'
+                                if(rbF.checked)genero='f'
                                 panelLog.clear()
                                 if(checkBoxFormula.checked){
                                     panelLog.l('N° de Nacimiento/Karma '+r.currentNumNacimiento+'\n')
@@ -606,7 +654,7 @@ Rectangle {
                                     panelLog.l(getItemJson('per'+r.currentNumNacimiento))
                                 }else{
                                     panelLog.l('¿Cómo es su vibración de nacimiento o karma '+r.currentNumNacimiento+'?\n')
-                                    panelLog.l(getItemJson('per'+r.currentNumNacimiento))
+                                    panelLog.l(getItemJson('per'+r.currentNumNacimiento+genero))
                                 }
                                 panelLog.visible=true
                                 panelLog.flk.contentY=0
@@ -928,7 +976,7 @@ Rectangle {
         let ret='?'
         let jsonString
         if(r.jsonNum===''){
-            r.jsonNum=unik.getFile('num.json')
+            r.jsonNum=unik.getFile('numv2.json')
         }
         jsonString=r.jsonNum.replace(/\n/g, ' ')
         let json=JSON.parse(jsonString)
@@ -940,7 +988,7 @@ Rectangle {
         let ret='?'
         let jsonString
         if(r.jsonNum===''){
-            r.jsonNum=unik.getFile('num.json')
+            r.jsonNum=unik.getFile('numv2.json')
         }
         jsonString=r.jsonNum.replace(/\n/g, ' ')
         let json=JSON.parse(jsonString)
@@ -952,7 +1000,7 @@ Rectangle {
         let ret='?'
         let jsonString
         if(r.jsonNum===''){
-            r.jsonNum=unik.getFile('num.json')
+            r.jsonNum=unik.getFile('numv2.json')
         }
         jsonString=r.jsonNum.replace(/\n/g, ' ')
         let json=JSON.parse(jsonString)
@@ -1068,6 +1116,8 @@ Rectangle {
         return sformTodo
     }
     function printData(nom, date){
+        let genero='m'
+        if(rbF.checked)genero='f'
         txtDataSearchNom.text=nom
         let d = date.getDate()
         let m = date.getMonth() + 1
@@ -1078,7 +1128,7 @@ Rectangle {
         panelLog.l('Número de Karma '+vcurrentNumNacimiento+'\n')
         panelLog.l(getNumNomText(nom))
         panelLog.l('¿Cómo es su personalidad?\n\n\n\n\n\n')
-        panelLog.l(getItemJson('per'+vcurrentNumNacimiento))
+        panelLog.l(getItemJson('per'+vcurrentNumNacimiento+genero))
     }
     function calcularAP(){
         r.esMaestro=false
@@ -1238,14 +1288,17 @@ Rectangle {
     }
     function getTodo(){
         let ret=''
+        let genero='m'
+        if(rbF.checked)genero='f'
         ret+='Cuadro Numerológico de '+txtDataSearchNom.text+'\n\n'
         if(checkBoxFormula.checked){
             ret+='Personalidad '+r.currentNumPersonalidad+'\n'
             ret+='Fórmula: '+f0.text+'\n'
-            ret+=getItemJson('per'+r.currentNumPersonalidad)
+
+            ret+=getItemJson('per'+r.currentNumPersonalidad+genero)
         }else{
             ret+='¿Cómo es su personalidad?\n\n'
-            ret+=getItemJson('per'+r.currentNumPersonalidad)
+            ret+=getItemJson('per'+r.currentNumPersonalidad+genero)
         }
         ret+='\n\n'
 
@@ -1253,10 +1306,10 @@ Rectangle {
         if(checkBoxFormula.checked){
             ret+='N° de Nacimiento/Karma '+r.currentNumNacimiento+'\n\n'
             ret+='Fórmula: '+f0.text+'\n'
-            ret+=getItemJson('per'+r.currentNumNacimiento)
+            ret+=getItemJson('per'+r.currentNumNacimiento+genero)
         }else{
             ret+='¿Cómo es su vibración de nacimiento o karma '+r.currentNumNacimiento+'?\n\n'
-            ret+=getItemJson('per'+r.currentNumNacimiento)
+            ret+=getItemJson('per'+r.currentNumNacimiento+genero)
         }
         ret+='\n\n'
 
