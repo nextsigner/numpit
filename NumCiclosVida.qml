@@ -1303,7 +1303,7 @@ Rectangle {
         let ret=''
         let genero='m'
         if(rbF.checked)genero='f'
-        ret+='Cuadro Numerológico de '+txtDataSearchNom.text+'\n\n'
+        ret+='\n\nCuadro Numerológico de '+txtDataSearchNom.text+'\n\n'
         if(checkBoxFormula.checked){
             ret+='Personalidad '+r.currentNumPersonalidad+'\n'
             ret+='Fórmula: '+f0.text+'\n'
@@ -1367,6 +1367,12 @@ Rectangle {
 
         //Lista de 100 años personales
         ret+=mkDataList()
+        ret+='\n\n'
+
+        //Créditos
+        let dt=new Date(Date.now())
+        ret+='Cuadro numerológico creado en fecha '+dt.toString()+'\n'
+        ret+='Utilizando la aplicación NumPit desarrollada por Ricardo Martín Pizarro. Whatsapp +549 11 3802 4370. E-Mail: nextsigner@gmail.com\n'
         ret+='\n\n'
         return ret
     }
